@@ -7,5 +7,6 @@ dependencies = [
     "requests",
     "typing_extensions",
     "flask_sqlalchemy",
+    "coverage"
 ]
 requires-python = ">= 3.8"
