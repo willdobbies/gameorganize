@@ -1,7 +1,6 @@
 import csv 
-import time
 
-from gameorganize.model.game import *
+from gameorganize.model.game import GameEntry, Completion
 
 # Library columns:
 #    "Unique Game ID", "Title", "Platform", "Sub-Platform",
@@ -32,7 +31,8 @@ class ImporterBackloggery():
 
         for entry in data:
             completion_name = entry.get("Status", "")
-            if(not completion_name): completion_name = "Unplayed"
+            if(not completion_name): 
+                completion_name = "Unplayed"
 
             new_games.append(GameEntry(
                 name = entry.get("Title"),

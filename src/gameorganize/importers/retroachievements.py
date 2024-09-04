@@ -1,14 +1,14 @@
 import requests
 import json
 
-from gameorganize.model.game import *
+from gameorganize.model.game import GameEntry, Completion
 
 class ImporterRetroAchievements():
     def __init__(self, username:str, api_key:str):
         self.username = username
         self.api_key = api_key
 
-    def fetch():
+    def fetch(self):
         params = {
             "z": self.username, 
             "y": self.api_key, 

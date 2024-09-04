@@ -2,7 +2,7 @@ import requests
 import json
 import pytest
 
-from gameorganize.model.game import *
+from gameorganize.model.game import GameEntry, Completion, Ownership
 
 class ImporterSteam():
     def __init__(self, steamId:str, apiKey:str):
@@ -101,7 +101,7 @@ def test_fetch(steamId, apiKey):
     importer = ImporterSteam(steamId, apiKey)
     
     fdata = importer.fetch()
-    assert (fdata != None)
+    assert (fdata is not None)
 
     print("Fetched data for {} games".format(len(fdata)))
     with open("test/steam.json", "w") as buf:
@@ -112,7 +112,7 @@ def test_fetch_stats(steamId, apiKey):
     importer = ImporterSteam(steamId, apiKey)
 
     stats = importer.fetch_stats(215670)
-    assert (stats.get("achievements", []) != None)
+    assert (stats.get("achievements", []) is not None)
 
     print(stats)
 

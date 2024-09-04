@@ -1,9 +1,5 @@
-from flask import Flask, render_template, send_file, request, url_for, flash, redirect, request
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import func
-from sqlalchemy import update
-
-from model.game import *
+from flask import Flask, render_template, request, url_for, redirect
+from model.game import sessionmaker, GameEntry, Completion, Base, sa
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '7103fd2f0697987fef0626de455aeb8617f8318c2ecaad41'
