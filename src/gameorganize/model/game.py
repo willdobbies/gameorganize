@@ -1,6 +1,14 @@
-from gameorganize.model.db import db
 from sqlalchemy.orm import Mapped, mapped_column
 import enum
+
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
+
+
+class Base(DeclarativeBase):
+  pass
+
+db = SQLAlchemy(model_class=Base)
 
 class Completion(enum.Enum):
     Null = -1
@@ -27,17 +35,15 @@ class Priority(enum.Enum):
     Replay = 6
 
 class GameEntry(db.Model):
-    __tablename__ = "game_entry"
-
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column()
+    name: Mapped[str] = mapped_column(unique=True)
     platform: Mapped[str] = mapped_column()
     completion: Mapped[Completion] = mapped_column(default=Completion.Unplayed)
     ownership: Mapped[Ownership] = mapped_column(default=Ownership.Physical)
     priority: Mapped[Priority] = mapped_column(default=Priority.Normal)
-    cheev: Mapped[int] = mapped_column()
-    cheev_total: Mapped[int] = mapped_column()
-    notes:Mapped[str] = mapped_column()
+    cheev: Mapped[int] = mapped_column(default=0)
+    cheev_total: Mapped[int] = mapped_column(default=0)
+    notes:Mapped[str] = mapped_column(default="")
 
     def __repr__(self):
         return f'<Game {self.name} @ {self.platform} [{self.completion.name}]>'

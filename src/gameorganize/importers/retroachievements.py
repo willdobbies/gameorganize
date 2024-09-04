@@ -19,6 +19,9 @@ class ImporterRetroAchievements():
             params=params
         )
 
+        if(r.status_code != 200):
+            raise Exception(f"Error fetching data, {r.status_code}: {r.reason}")
+
         return r.json()
 
     def parse(self, res : dict):
