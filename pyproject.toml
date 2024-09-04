@@ -3,6 +3,7 @@ name = "gameorganize"
 dynamic = ["version"]
 dependencies = [
     "pytest", 
+    "coverage",
     "flask", 
     "requests",
     "typing_extensions",
