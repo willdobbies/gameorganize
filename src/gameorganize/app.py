@@ -51,7 +51,7 @@ def game_add():
     db.session.add(new_game)
     db.session.commit()
     flash(f"Added new game {new_game.name}")
-    return redirect(url_for('all_games', id=id))
+    return redirect(url_for('all_games'))
 
   return render_template(
     'game/add.html',
@@ -71,6 +71,31 @@ def game_delete(id):
 
   flash(f"Deleted game {game.name}")
   return redirect(url_for('all_games'))
+
+@app.route("/import", methods=['GET', 'POST'])
+def game_import():
+  if request.method == 'POST':
+    site = request.form.get("website")
+
+    new_games = []
+
+    if(site == "Steam"):
+      pass
+    elif(site == "RetroAchievements"):
+      pass
+    else:
+      flash(f"Invalid site {site}")
+      return redirect(url_for('all_games'))
+
+    for game in new_games:
+      db.session.add(game)
+    db.session.commit()
+    flash(f"Imported {len(new_games)} games from {site}")
+    return redirect(url_for('all_games'))
+
+  return render_template(
+    'import.html'
+  )
 
 @app.route("/")
 def all_games():
