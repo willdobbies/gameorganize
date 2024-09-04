@@ -1,0 +1,11 @@
+[project]
+name = "gameorganize"
+dynamic = ["version"]
+dependencies = [
+    "pytest", 
+    "flask", 
+    "requests",
+    "typing_extensions",
+    "flask_sqlalchemy",
+]
+requires-python = ">= 3.8"
