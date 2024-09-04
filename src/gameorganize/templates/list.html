@@ -51,7 +51,16 @@
       $('#data').DataTable({
         paging: false,
         layout: {
-            topStart: 'searchBuilder'
+            bottomStart: {
+                'buttons':[
+                    {
+                        extend:'searchBuilder',
+                        config:{
+                        },
+                    }
+                ]
+            },
+            bottomEnd: 'paging'
         },
         columns: [
           {searchable: true},
