@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<table id="data" class="table table-striped">
+<thead>
+    <tr>
+    <th>Game</th>
+    <th>Platform</th>
+    <th>Completion</th>
+    <th>Achievements</th>
+    <th>Notes</th>
+    </tr>
+</thead>
+<tbody>
+    {% for game in all_games %}
+    <tr class="game">
+        <td>
+            <a href="{{ url_for ('game', id=game.id) }}">{{ game.name }}</a>
+        </td>
+        <td>
+            {{ game.platform }}
+        </td>
+        <td>
+            <div class="badge badge-{{ game.completion.name.lower() }}">
+                {{ game.completion.name }}
+            </div>
+        </td>
+        <td>
+            {% if game.cheev > 0 %}
+                <div>
+                    <progress id="cheev_prog" max="{{ game.cheev_total }}" value="{{ game.cheev }}"></progress>
+                    {{ game.cheev }} / {{ game.cheev_total }}
+                    🏆
+                </div>
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>
+            {{ game.notes }}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{%endblock%}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable({
+        paging: false,
+        layout: {
+            topStart: 'searchBuilder'
+        },
+        columns: [
+          {searchable: true},
+          {searchable: true},
+          {orderable: true, searchable: true},
+          {orderable: false, searchable: false},
+          null],
+      });
+    });
+  </script>
+{% endblock %}

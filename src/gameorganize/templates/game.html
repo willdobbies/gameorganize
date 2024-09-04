@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="" method="post">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" name="name" value="{{ game.name }}">
+    </div>
+    <div class="form-group">
+        <label for="platform">Platform</label>
+        <input type="text" class="form-control" name="platform" value="{{ game.platform }}">
+    </div>
+        <label for="completion">Completion</label>
+        <select class="form-control" name="completion">
+            {% for type in Completion %}
+                {% if type == game.completion %}
+                    <option selected>{{ type.name }}</option>
+                {% else %}
+                    <option>{{ type.name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    <div class="form-group">
+        <label for="achievements">Achievements</label>
+        <input type="number" name="cheev" class="form-control mb-2" value="{{game.cheev}}">
+        <input type="number" name="cheev_total" class="form-control mb-2" value="{{game.cheev_total}}">
+    </div>
+    <div class="form-group">
+        <label for="notes">Notes</label>
+        <textarea name="notes" cols="40" rows="5"class="form-control">{{ game.notes }}</textarea>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="{{ url_for('game_delete', id=game.id) }}" class="btn btn-danger">Delete</a>
+    </div>
+    <input type="hidden" name="id" value="{{ game.id }}" />
+</form>
+{% endblock %}

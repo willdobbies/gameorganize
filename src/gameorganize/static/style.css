@@ -1,0 +1,130 @@
+:root {
+  --color-text: #fff;
+  --color-main: rgb(40, 85, 170);
+  --color-success: rgb(91, 190, 45);
+  --color-error: rgb(197, 59, 100);
+
+  --color-unplayed: rgb(92, 94, 97);
+  --color-beaten: rgb(62, 227, 50);
+  --color-completed: rgb(240, 243, 79);
+  --color-endless: rgb(127, 79, 149);
+}
+
+*
+{
+  padding: 0px;
+  margin: 0px;
+}
+
+a {
+  color: inherit;
+}
+
+body
+{
+  font-family: "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
+  width: 100%;
+  height: 100%;
+}
+
+.footer
+{
+  width: 100%;
+  text-align: center;
+  position: fixed; 
+  bottom: 0;
+  padding: 5px;
+}
+
+th, td {
+  padding: 5px;
+  text-align: center;
+}
+
+button
+{
+}
+
+.hbox
+{
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.hbox > div 
+{
+  height: 100%;
+  padding: 5px 10px;
+}
+
+.hbox > h2 
+{
+  padding: 10px;
+}
+
+.banner {
+  background-color: var(--color-main);
+  color: white;
+  padding: 10px;
+}
+
+.blanklink {
+  text-decoration: none;
+}
+
+.banner-links {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  grid-gap: 10px;
+}
+
+.banner-links > div, a {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.message {
+  padding: 10px;
+  margin: 5px;
+  background-color: #f3f3f3
+}
+
+nav a {
+  color: #d64161;
+  font-size: 3em;
+  margin-left: 50px;
+  text-decoration: none;
+}
+
+.alert {
+  padding: 20px;
+  margin: 5px;
+  color: #970020;
+  background-color: #ffd5de;
+}
+
+.badge {
+  border-radius: 50px;
+}
+
+.badge-null{
+  background-color: var(--color-unplayed);
+}
+.badge-unplayed{
+  background-color: var(--color-unplayed);
+}
+.badge-started{
+  background-color: var(--color-error);
+}
+.badge-beaten{
+  background-color: var(--color-beaten);
+}
+.badge-completed{
+  background-color: var(--color-completed);
+}
+.badge-endless{
+  background-color: var(--color-endless);
+}
