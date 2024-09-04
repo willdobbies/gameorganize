@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+<a href="{{ url_for('game_add')}}" class="btn btn-success">Add Game</a>
 <table id="data" class="table table-striped">
 <thead>
     <tr>
@@ -14,7 +15,7 @@
     {% for game in all_games %}
     <tr class="game">
         <td>
-            <a href="{{ url_for ('game', id=game.id) }}">{{ game.name }}</a>
+            <a href="{{ url_for ('game_detail', id=game.id) }}">{{ game.name }}</a>
         </td>
         <td>
             {{ game.platform }}

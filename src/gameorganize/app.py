@@ -10,7 +10,7 @@ Session = sessionmaker(bind=engine)
 session = Session() 
 
 @app.route("/game/<id>", methods=['GET', 'POST'])
-def game(id):
+def game_detail(id):
   game = session.get(GameEntry, id)
 
   if(not game):
@@ -24,11 +24,31 @@ def game(id):
     game.cheev_total = request.form.get("cheev_total")
     game.notes = request.form.get("notes")
     session.commit()
-    return redirect(url_for('game', id=id))
+    return redirect(url_for('game_detail', id=id))
 
   return render_template(
-    'game.html',
+    'game/detail.html',
     game=game,
+    Completion=Completion
+  )
+
+@app.route("/game/add", methods=['GET', 'POST'])
+def game_add():
+  if request.method == 'POST':
+    new_game = GameEntry(
+      name = request.form.get("name"),
+      platform = request.form.get("platform"),
+      completion = request.form.get("completion"),
+      cheev = request.form.get("cheev"),
+      cheev_total = request.form.get("cheev_total"),
+      notes = request.form.get("notes"),
+    )
+    session.add(new_game)
+    session.commit()
+    return redirect(url_for('all_games', id=id))
+
+  return render_template(
+    'game/add.html',
     Completion=Completion
   )
 
