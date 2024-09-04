@@ -1,8 +1,6 @@
-from sqlalchemy.orm import sessionmaker 
-import sqlalchemy as sa
+from model.db import db
+from sqlalchemy.orm import Mapped, mapped_column
 import enum
-
-Base = sa.orm.declarative_base()
 
 class Completion(enum.Enum):
     Null = -1
@@ -28,28 +26,23 @@ class Priority(enum.Enum):
     NowPlaying = 5
     Replay = 6
 
-class GameEntry(Base):
+class GameEntry(db.Model):
     __tablename__ = "game_entry"
 
-    id = sa.Column(sa.Integer, primary_key=True)
-    name = sa.Column("name", sa.String)
-    platform = sa.Column("platform", sa.String)
-    completion = sa.Column(sa.Enum(Completion), default=Completion.Unplayed)
-    ownership = sa.Column(sa.Enum(Ownership), default=Ownership.Physical)
-    priority = sa.Column(sa.Enum(Priority), default=Priority.Normal)
-    cheev = sa.Column("cheev", sa.Integer, default=0)
-    cheev_total = sa.Column("cheev_total", sa.Integer, default=0)
-    notes = sa.Column("notes", sa.String, default="")
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column()
+    platform: Mapped[str] = mapped_column()
+    completion: Mapped[Completion] = mapped_column(default=Completion.Unplayed)
+    ownership: Mapped[Ownership] = mapped_column(default=Ownership.Physical)
+    priority: Mapped[Priority] = mapped_column(default=Priority.Normal)
+    cheev: Mapped[int] = mapped_column()
+    cheev_total: Mapped[int] = mapped_column()
+    notes:Mapped[str] = mapped_column()
 
     def __repr__(self):
         return f'<Game {self.name} @ {self.platform} [{self.completion.name}]>'
 
-if (__name__ == "__main__"):
-    engine = sa.create_engine("sqlite:///games.sqlite3", echo=True)
-    Base.metadata.create_all(bind=engine)
-    Session = sessionmaker(bind=engine)
-    session = Session() 
-
+def test_entries():
     # Add some games
     g1 = GameEntry(
         name="Oddworld: Abe's Oddysee", 
@@ -76,7 +69,7 @@ if (__name__ == "__main__"):
         cheev_total=100
     )
 
-    session.add(g1)
-    session.add(g2)
-    session.add(g3)
-    session.commit()
+    #session.add(g1)
+    #session.add(g2)
+    #session.add(g3)
+    #session.commit()
