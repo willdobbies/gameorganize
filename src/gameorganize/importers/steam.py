@@ -85,8 +85,8 @@ class ImporterSteam():
                 platform = "Steam",
                 completion = completion,
                 ownership = Ownership.Digital,
-                cheev = len(cheev),
-                cheev_total = len(cheev_got)
+                cheev = len(cheev_got),
+                cheev_total = len(cheev)
             )
 
             all_games.append(new_game)

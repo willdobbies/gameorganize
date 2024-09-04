@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect, flash
 from model.game import db
 from model.game import GameEntry, Completion
 from importers.retroachievements import ImporterRetroAchievements as ImporterRA
+from importers.steam import ImporterSteam
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '7103fd2f0697987fef0626de455aeb8617f8318c2ecaad41'
@@ -105,15 +106,19 @@ def game_import():
 
     try:
       if(site == "Steam"):
-        pass
+        importer = ImporterSteam(apiId, apiKey)
+        fdata = importer.fetch()
+        new_games = importer.parse(fdata)
+
       elif(site == "RetroAchievements"):
         importer = ImporterRA(username=apiId, api_key=apiKey)
         fdata = importer.fetch()
-        print(fdata)
         new_games = importer.parse(fdata)
+
       else:
         flash(f"Invalid site {site}")
         return redirect(url_for('all_games'))
+
     except Exception as e:
       flash(f"Error importing from {site}, : {e}")
       return redirect(url_for('all_games'))
