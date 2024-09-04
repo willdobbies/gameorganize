@@ -1,10 +1,8 @@
-from sqlalchemy.ext.declarative import declarative_base
-import sqlalchemy as sa
+from gameorganize.model.db import db
+from sqlalchemy.orm import Mapped, mapped_column
 
-Base = declarative_base()
-
-class Platform(Base):
+class Platform(db.Model):
     __tablename__ = "platforms"
 
-    id = sa.Column(sa.Integer, primary_key=True)
-    name = sa.Column("name", sa.String)
+    id:Mapped[int] = mapped_column(primary_key=True)
+    name:Mapped[str] = mapped_column(primary_key=True)

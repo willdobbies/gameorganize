@@ -1,4 +1,4 @@
-from model.db import db
+from gameorganize.model.db import db
 from sqlalchemy.orm import Mapped, mapped_column
 import enum
 
