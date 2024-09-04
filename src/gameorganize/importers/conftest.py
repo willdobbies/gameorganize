@@ -1,13 +1,13 @@
 import pytest
 
 def pytest_addoption(parser):
-    parser.addoption("--steamId", action="store")
+    parser.addoption("--apiId", action="store")
     parser.addoption("--apiKey", action="store")
 
 
 @pytest.fixture
-def steamId(request):
-    return request.config.getoption("--steamId")
+def apiId(request):
+    return request.config.getoption("--apiId")
 
 @pytest.fixture
 def apiKey(request):

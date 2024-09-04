@@ -1,5 +1,4 @@
 import requests
-import json
 
 from gameorganize.model.game import GameEntry, Completion
 
@@ -45,20 +44,3 @@ class ImporterRetroAchievements():
             all_games.append(new_game)
         
         return all_games
-
-if (__name__ == "__main__"):
-    import sys
-
-    importer = ImporterRetroAchievements(username=sys.argv[1], api_key=sys.argv[2])
-
-    ## Test fetch
-    #fdata = importer.fetch()
-    #print("Fetched data for {} games".format(len(fdata)))
-    #with open("test/retroachievements.json", "w") as buf:
-    #    json.dump(fdata, buf)
-
-    # Test parse
-    with open("test/retroachievements.json", "r") as buf:
-        data = json.loads(buf.read())
-        games = importer.parse(data)
-        print(games)

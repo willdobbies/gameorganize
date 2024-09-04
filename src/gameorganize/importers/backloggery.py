@@ -42,9 +42,3 @@ class ImporterBackloggery():
             ))
 
         return new_games
-    
-if (__name__ == "__main__"):
-    importer = ImporterBackloggery()
-    data = importer.csv_to_json("test/backloggery-library.csv")
-    games = importer.parse(data)
-    print(games)

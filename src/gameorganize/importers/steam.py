@@ -1,8 +1,5 @@
-import requests
-import json
-import pytest
-
 from gameorganize.model.game import GameEntry, Completion, Ownership
+import requests
 
 class ImporterSteam():
     def __init__(self, steamId:str, apiKey:str):
@@ -95,60 +92,3 @@ class ImporterSteam():
             all_games.append(new_game)
 
         return all_games
-
-@pytest.mark.skip(reason="reduce server stress")
-def test_fetch(steamId, apiKey):
-    importer = ImporterSteam(steamId, apiKey)
-    
-    fdata = importer.fetch()
-    assert (fdata is not None)
-
-    print("Fetched data for {} games".format(len(fdata)))
-    with open("test/steam.json", "w") as buf:
-        json.dump(fdata, buf)
-
-@pytest.mark.skip(reason="reduce server stress")
-def test_fetch_stats(steamId, apiKey):
-    importer = ImporterSteam(steamId, apiKey)
-
-    stats = importer.fetch_stats(215670)
-    assert (stats.get("achievements", []) is not None)
-
-    print(stats)
-
-def test_completion(steamId, apiKey):
-    importer = ImporterSteam(steamId, apiKey)
-
-    completion_null = importer.get_completion(0, {})
-    assert completion_null[0] == Completion.Unplayed
-
-    with open("test/steam-cheev1.json", "r") as buf:
-        stats = json.loads(buf.read())
-        completion = importer.get_completion(
-            1000,
-            stats
-        )
-
-        assert completion[0] == Completion.Started
-
-    with open("test/steam-cheev3.json", "r") as buf:
-        stats = json.loads(buf.read())
-        completion = importer.get_completion(
-            1000,
-            stats
-        )
-
-        print(stats)
-        print(completion[1])
-        print(completion[2])
-
-        assert completion[0] == Completion.Completed
-
-def test_parse(steamId, apiKey):
-    importer = ImporterSteam(steamId, apiKey)
-
-    with open("test/steam.json", "r") as buf:
-        data = json.loads(buf.read())
-        games = importer.parse(data)
-        print(games)
-    assert True
