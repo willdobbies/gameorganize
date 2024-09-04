@@ -9,7 +9,7 @@ basedir = Path(__file__).parent
 def test_fetch(apiId, apiKey):
     importer = ImporterRetroAchievements(username=apiId, api_key=apiKey)
     fdata = importer.fetch()
-    print("Fetched data for {} games".format(len(fdata)))
+    print(f"Fetched data for {len(fdata)} games")
     with open("test/retroachievements.json", "w") as buf:
         json.dump(fdata, buf)
 

@@ -10,7 +10,7 @@ class ImporterSteam():
         """
         Fetch info for all games belonging to a given steam user
         """
-        print("Fetching games for steam user id {}".format(self.steamId))
+        print(f"Fetching games for steam user id {self.steamId}")
         params={
             "key":self.apiKey,
             "steamid":self.steamId,
@@ -30,7 +30,7 @@ class ImporterSteam():
         """
         Fetch achievement data & stats for a given appid
         """
-        print("Fetching stats for steam appid {}".format(app_id))
+        print(f"Fetching stats for steam appid {app_id}")
         params={
             "key":self.apiKey,
             "steamid":self.steamId,

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, flash
 from model.db import db
 from model.game import GameEntry, Completion
 
@@ -17,7 +17,8 @@ def game_detail(id):
   game = db.session.get(GameEntry, id)
 
   if(not game):
-    return "Error: Game ID {} not found".format(id)
+    flash(f"Error: Game ID {id} not found")
+    return redirect(url_for('all_games'))
 
   if request.method == 'POST':
     game.name = request.form.get("name")
@@ -27,6 +28,7 @@ def game_detail(id):
     game.cheev_total = request.form.get("cheev_total")
     game.notes = request.form.get("notes")
     db.session.commit()
+    flash(f"Updated: Game {game.name}")
     return redirect(url_for('game_detail', id=id))
 
   return render_template(
@@ -48,6 +50,7 @@ def game_add():
     )
     db.session.add(new_game)
     db.session.commit()
+    flash(f"Added new game {new_game.name}")
     return redirect(url_for('all_games', id=id))
 
   return render_template(
@@ -58,13 +61,16 @@ def game_add():
 @app.route("/game/<id>/delete", methods=['GET', 'POST'])
 def game_delete(id):
   game = db.session.get(GameEntry, id)
+
   if(not game):
-    return "Error: Game ID {} not found".format(id)
+    flash(f"Error: Game ID {id} not found")
+    return redirect(url_for('all_games'))
   
   db.session.delete(game)
   db.session.commit()
 
-  return "Game ID {} deleted".format(id)
+  flash(f"Deleted game {game.name}")
+  return redirect(url_for('all_games'))
 
 @app.route("/")
 def all_games():

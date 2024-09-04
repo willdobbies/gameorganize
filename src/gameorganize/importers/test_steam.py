@@ -13,7 +13,7 @@ def test_fetch(apiId, apiKey):
     fdata = importer.fetch()
     assert (fdata is not None)
 
-    print("Fetched data for {} games".format(len(fdata)))
+    print(f"Fetched data for {len(fdata)} games")
     with open(basedir / "test/steam.json", "w") as buf:
         json.dump(fdata, buf)
 
