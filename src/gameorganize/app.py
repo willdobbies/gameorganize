@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, url_for, redirect, flash
-from model.game import db
-from model.game import GameEntry, Completion, Priority
 from importers.retroachievements import ImporterRetroAchievements as ImporterRA
 from importers.steam import ImporterSteam
+from model.game import GameEntry, Completion, Priority
+from model.game import db
+import re
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '7103fd2f0697987fef0626de455aeb8617f8318c2ecaad41'
@@ -160,8 +161,28 @@ def get_stats(games):
 
 @app.route("/massedit", methods=['POST'])
 def mass_edit():
-  print(request.form)
+  args = request.form.to_dict()
 
+  # Get all selected IDs
+  ids = []
+  for key in args:
+    if(not key.endswith(".selected")): 
+      continue
+    gameid = re.sub(".selected", "", key)
+    try:
+      gameid = int(gameid)
+    except Exception as e:
+      print(e)
+    ids.append(gameid)
+
+  #if(args.get("platform")):
+  #  filters.append(args.get("platform") == GameEntry.platform)
+  #if(args.get("completion")):
+  #  filters.append(args.get("completion") == GameEntry.completion)
+  #if(args.get("priority")):
+  #  filters.append(args.get("completion") == GameEntry.completion)
+
+  flash(f"Modified {len(ids)} games")
   return redirect(url_for("all_games"))
 
 @app.route("/", methods=['GET', 'POST'])

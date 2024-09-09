@@ -25,9 +25,8 @@
 <tbody>
     {% for game in all_games %}
     <tr class="game">
-        <input form="editform" type="hidden" id="id" name="id" value="{{game.id}}">
         <td>
-            <input type="checkbox">
+            <input form="editform" name="{{game.id}}.selected" type="checkbox">
         </td>
         <td>
             <a href="{{ url_for ('game_detail', id=game.id) }}">{{ game.name }}</a>
