@@ -6,6 +6,7 @@
 <table id="data" class="table table-striped">
 <thead>
     <tr>
+    <th><input id="select-all" type="checkbox"></th>
     <th>Game</th>
     <th>Platform</th>
     <th>Completion</th>
@@ -17,6 +18,9 @@
 <tbody>
     {% for game in all_games %}
     <tr class="game">
+        <td>
+            <input type="checkbox">
+        </td>
         <td>
             <a href="{{ url_for ('game_detail', id=game.id) }}">{{ game.name }}</a>
         </td>
@@ -52,15 +56,17 @@
 {%endblock%}
 
 {% block scripts %}
-  <!--script>
+  <script>
     $(document).ready(function () {
       $('#data').DataTable({
         paging: true,
         layout: {
-            topEnd: 'searchBuilder',
+            topEnd: null,
             bottomEnd: 'paging'
         },
         columns: [
+          {orderable: false, searchable: false},
+          {orderable: true, searchable: true},
           {orderable: true, searchable: true},
           {orderable: true, searchable: true},
           {orderable: true, searchable: true},
@@ -69,5 +75,17 @@
         ],
       });
     });
-  </script-->
+
+    $('#select-all').click(function(event) {   
+        if(this.checked) {
+            $(':checkbox').each(function() {
+                this.checked = true;                        
+            });
+        } else {
+            $(':checkbox').each(function() {
+                this.checked = false;                       
+            });
+        }
+    }); 
+  </script>
 {% endblock %}
