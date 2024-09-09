@@ -185,8 +185,6 @@ def mass_edit():
   flash(f"Modified {len(selected)} games")
   return redirect(request.referrer)
 
-from sqlalchemy import or_
-
 @app.route("/", methods=['GET', 'POST'])
 def all_games():
   if request.method == 'POST':
@@ -194,6 +192,7 @@ def all_games():
     url_params = request.form.to_dict()
     url_params["priority"] = request.form.getlist("priority")
     url_params["completion"] = request.form.getlist("completion")
+    url_params["platform"] = request.form.getlist("platform")
 
     url_params = {k: v for k, v in url_params.items() if v}
 
@@ -203,7 +202,8 @@ def all_games():
   filters = []
 
   if("platform" in args):
-    filters.append(args.get("platform") == GameEntry.platform)
+    all_platform = args.getlist("platform")
+    filters.append(GameEntry.platform.in_(all_platform))
 
   if("priority" in args):
     all_priority = args.getlist("priority")
