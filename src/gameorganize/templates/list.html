@@ -59,11 +59,12 @@
   <script>
     $(document).ready(function () {
       $('#data').DataTable({
-        paging: true,
+        paging: false,
         layout: {
             topEnd: null,
             bottomEnd: 'paging'
         },
+        order: [[1, 'asc']],
         columns: [
           {orderable: false, searchable: false},
           {orderable: true, searchable: true},
