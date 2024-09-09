@@ -164,7 +164,7 @@ def mass_edit():
   args = request.form.to_dict()
 
   # Get all selected IDs
-  ids = []
+  selected = []
   for key in args:
     if(not key.endswith(".selected")): 
       continue
@@ -173,17 +173,23 @@ def mass_edit():
       gameid = int(gameid)
     except Exception as e:
       print(e)
-    ids.append(gameid)
+    game = db.session.get(GameEntry, gameid)
+    selected.append(game)
+  print(game.priority)
+  
+  # Mass apply params
+  for game in selected:
+    if(args.get("platform")):
+      game.platform = args.get("platform")
+    if(args.get("completion")):
+      game.completion = Completion(int(args.get("completion")))
+    if(args.get("priority")):
+      game.priority = Priority(int(args.get("priority")))
 
-  #if(args.get("platform")):
-  #  filters.append(args.get("platform") == GameEntry.platform)
-  #if(args.get("completion")):
-  #  filters.append(args.get("completion") == GameEntry.completion)
-  #if(args.get("priority")):
-  #  filters.append(args.get("completion") == GameEntry.completion)
+  db.session.commit()
 
-  flash(f"Modified {len(ids)} games")
-  return redirect(url_for("all_games"))
+  flash(f"Modified {len(selected)} games")
+  return redirect(request.referrer)
 
 @app.route("/", methods=['GET', 'POST'])
 def all_games():
@@ -197,6 +203,8 @@ def all_games():
 
   if("platform" in args):
     filters.append(args.get("platform") == GameEntry.platform)
+  if("priority" in args):
+    filters.append(args.get("priority") == GameEntry.priority)
   if("completion" in args):
     filters.append(args.get("completion") == GameEntry.completion)
   if("cheev" in args):
