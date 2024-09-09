@@ -1,9 +1,15 @@
 {% extends "base.html" %}
+
 {% block content %}
+
 <a href="{{ url_for('game_add')}}" class="btn btn-success">New</a>
 <a href="{{ url_for('game_import')}}" class="btn btn-primary">Import</a>
-{% include "filter.html" %}
-{% include "stats.html" %}
+
+{% include "list/filter.html" %}
+{% include "list/stats.html" %}
+{% include "list/edit.html" %}
+
+<form id="gamelist" action="" method="post">
 <table id="data" class="table table-striped">
 <thead>
     <tr>
@@ -19,6 +25,7 @@
 <tbody>
     {% for game in all_games %}
     <tr class="game">
+        <input form="editform" type="hidden" id="id" name="id" value="{{game.id}}">
         <td>
             <input type="checkbox">
         </td>
@@ -54,6 +61,7 @@
     {% endfor %}
 </tbody>
 </table>
+</form>
 {%endblock%}
 
 {% block scripts %}

@@ -143,13 +143,26 @@ def game_import():
 def get_stats(games):
   perc = {}
 
+  total = len([game for game in games])
+
   for comp in Completion:
     filtered_games = [game for game in games if game.completion == comp]
-    perc[comp] = len(filtered_games) / len([game for game in games])
+
+    if(total == 0):
+      perc[comp]=0
+      continue
+
+    perc[comp] = len(filtered_games) / total
 
   return {
     "perc":perc
   }
+
+@app.route("/massedit", methods=['POST'])
+def mass_edit():
+  print(request.form)
+
+  return redirect(url_for("all_games"))
 
 @app.route("/", methods=['GET', 'POST'])
 def all_games():
@@ -175,7 +188,7 @@ def all_games():
   stats = get_stats(all_games)
 
   return render_template(
-    'list.html',
+    'list/detail.html',
     all_games=all_games,
     all_platforms=all_platforms,
     stats=stats,
