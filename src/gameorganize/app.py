@@ -119,6 +119,9 @@ def game_import():
         fdata = importer.fetch()
         new_games = importer.parse(fdata)
 
+      elif(site == "CSV"):
+        pass
+
       else:
         flash(f"Invalid site {site}")
         return redirect(url_for('all_games'))
