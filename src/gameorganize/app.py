@@ -3,11 +3,13 @@ from importers.retroachievements import ImporterRetroAchievements as ImporterRA
 from importers.steam import ImporterSteam
 from model.game import GameEntry, Completion, Priority
 from model.game import db
+import csv 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '7103fd2f0697987fef0626de455aeb8617f8318c2ecaad41'
 app.config['MAX_CONTENT_PATH'] = pow(10,7)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///games.sqlite3"
+app.config['UPLOAD_FOLDER'] = "./instance/"
 
 # setup sqlalchemy
 db.init_app(app)
@@ -120,15 +122,42 @@ def game_import():
         new_games = importer.parse(fdata)
 
       elif(site == "CSV"):
-        pass
+        data = request.files.get("csv")
+
+        if(not data):
+          flash("Missing CSV data")
+          return redirect(url_for('game_import'))
+
+        csv_data = data.read().decode("utf-8").split("\n")
+        csv_reader = csv.DictReader(csv_data)
+
+        added = 0
+        for line in csv_reader:
+            new_game = GameEntry(
+              name = line.get("Name"),
+              platform = line.get("Platform"),
+              completion = Completion[line.get("Completion")],
+              notes = line.get("Notes"),
+            )
+
+            try:
+              db.session.add(new_game)
+              db.session.commit()
+              added += 1
+            except Exception as e:
+              db.session.rollback()
+              flash(f"DB Errorr: {e}")
+
+
+        flash(f"Imported {added} games from csv")
 
       else:
         flash(f"Invalid site {site}")
-        return redirect(url_for('all_games'))
+        return redirect(url_for('game_import'))
 
     except Exception as e:
       flash(f"Error importing from {site}, : {e}")
-      return redirect(url_for('all_games'))
+      return redirect(url_for('game_import'))
 
     for game in new_games:
       try:
