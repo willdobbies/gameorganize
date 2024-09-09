@@ -174,8 +174,9 @@ def mass_edit():
     except Exception as e:
       print(e)
     game = db.session.get(GameEntry, gameid)
+    if(not game):
+      continue
     selected.append(game)
-  print(game.priority)
   
   # Mass apply params
   for game in selected:

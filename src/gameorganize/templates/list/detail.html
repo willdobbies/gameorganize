@@ -32,11 +32,11 @@
             <a href="{{ url_for ('game_detail', id=game.id) }}">{{ game.name }}</a>
         </td>
         <td>
-            {{ game.platform }}
+            <a href="{{ url_for('all_games', platform=game.platform) }}">{{ game.platform }}</a>
         </td>
         <td>
             <div class="badge badge-{{ game.completion.name.lower() }}">
-                {{ game.completion.name }}
+                <a href="{{ url_for('all_games', completion=game.completion.name) }}">{{ game.completion.name }}</a>
             </div>
         </td>
         <td>
@@ -51,7 +51,7 @@
             {% endif %}
         </td>
         <td>
-            {{ game.priority.name }}
+            <a href="{{ url_for('all_games', priority=game.priority.name) }}">{{ game.priority.name }}</a>
         </td>
         <td>
             {{ game.notes }}
