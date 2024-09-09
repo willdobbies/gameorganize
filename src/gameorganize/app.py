@@ -136,6 +136,17 @@ def game_import():
     'import.html'
   )
 
+def get_stats(games):
+  perc = {}
+
+  for comp in Completion:
+    filtered_games = [game for game in games if game.completion == comp]
+    perc[comp] = len(filtered_games) / len([game for game in games])
+
+  return {
+    "perc":perc
+  }
+
 @app.route("/", methods=['GET', 'POST'])
 def all_games():
   if request.method == 'POST':
@@ -157,12 +168,13 @@ def all_games():
   all_platforms=[plat[0] for plat in db.session.query(GameEntry.platform).distinct()]
   all_games=db.session.query(GameEntry).filter(*filters)
 
-  print(all_platforms)
+  stats = get_stats(all_games)
 
   return render_template(
     'list.html',
     all_games=all_games,
     all_platforms=all_platforms,
+    stats=stats,
     Completion=Completion,
     Priority=Priority
   )

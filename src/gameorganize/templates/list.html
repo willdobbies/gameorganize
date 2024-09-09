@@ -3,6 +3,10 @@
 <a href="{{ url_for('game_add')}}" class="btn btn-success">New</a>
 <a href="{{ url_for('game_import')}}" class="btn btn-primary">Import</a>
 {% include "filter.html" %}
+{% for perc in stats["perc"] %}
+    <div>{{perc}}:</div>
+    <progress id="comp_perc" max="1.0" value="{{ stats['perc'][perc] }}"></progress>
+{% endfor %}
 <table id="data" class="table table-striped">
 <thead>
     <tr>
