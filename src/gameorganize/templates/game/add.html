@@ -9,12 +9,22 @@
         <label for="platform">Platform</label>
         <input type="text" class="form-control" name="platform" value="">
     </div>
+    <div class="form-group">
         <label for="completion">Completion</label>
         <select class="form-control" name="completion">
             {% for type in Completion %}
                 <option>{{ type.name }}</option>
             {% endfor %}
         </select>
+    </div>
+    <div class="form-group">
+        <label for="priority">Priority</label>
+        <select class="form-control" name="priority">
+            {% for type in Priority %}
+                <option>{{ type.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
     <div class="form-group">
         <label for="achievements">Achievements</label>
         <input type="number" name="cheev" class="form-control mb-2" value="0">

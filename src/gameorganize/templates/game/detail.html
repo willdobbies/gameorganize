@@ -9,6 +9,7 @@
         <label for="platform">Platform</label>
         <input type="text" class="form-control" name="platform" value="{{ game.platform }}">
     </div>
+    <div class="form-group">
         <label for="completion">Completion</label>
         <select class="form-control" name="completion">
             {% for type in Completion %}
@@ -19,6 +20,19 @@
                 {% endif %}
             {% endfor %}
         </select>
+    </div>
+    <div class="form-group">
+        <label for="priority">Priority</label>
+        <select class="form-control" name="priority">
+            {% for type in Priority %}
+                {% if type == game.priority %}
+                    <option selected>{{ type.name }}</option>
+                {% else %}
+                    <option>{{ type.name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
     <div class="form-group">
         <label for="achievements">Achievements</label>
         <input type="number" name="cheev" class="form-control mb-2" value="{{game.cheev}}">

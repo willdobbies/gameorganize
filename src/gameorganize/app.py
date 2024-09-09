@@ -39,7 +39,8 @@ def game_detail(id):
   return render_template(
     'game/detail.html',
     game=game,
-    Completion=Completion
+    Completion=Completion,
+    Priority=Priority
   )
 
 @app.route("/game/add", methods=['GET', 'POST'])
@@ -65,7 +66,8 @@ def game_add():
 
   return render_template(
     'game/add.html',
-    Completion=Completion
+    Completion=Completion,
+    Priority=Priority
   )
 
 @app.route("/game/<id>/delete", methods=['GET', 'POST'])
