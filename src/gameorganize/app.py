@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, url_for, redirect, flash
 from model.game import db
-from model.game import GameEntry, Completion
+from model.game import GameEntry, Completion, Priority
 from importers.retroachievements import ImporterRetroAchievements as ImporterRA
 from importers.steam import ImporterSteam
 
@@ -155,4 +155,6 @@ def all_games():
   return render_template(
     'list.html',
     all_games=all_games,
+    Completion=Completion,
+    Priority=Priority
   )
