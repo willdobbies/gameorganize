@@ -136,8 +136,12 @@ def game_import():
     'import.html'
   )
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def all_games():
+  if request.method == 'POST':
+    print(request.form.to_dict())
+    return redirect(url_for("all_games"))
+
   args = request.args
   filters = []
 
@@ -148,13 +152,16 @@ def all_games():
   if("cheev" in args):
     filters.append(args.get("cheev") <= GameEntry.cheev)
   
-  print(filters)
-
+  #really ugly 'get all platforms' method. TODO: Make seperate table
+  all_platforms=[plat[0] for plat in db.session.query(GameEntry.platform).distinct()]
   all_games=db.session.query(GameEntry).filter(*filters)
+
+  print(all_platforms)
 
   return render_template(
     'list.html',
     all_games=all_games,
+    all_platforms=all_platforms,
     Completion=Completion,
     Priority=Priority
   )
