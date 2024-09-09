@@ -78,6 +78,14 @@ button
   color: white;
 }
 
+.plainlink {
+  text-decoration: none;
+}
+.plainlink:hover{
+  color: inherit;
+  text-decoration: none;
+}
+
 .message {
   padding: 10px;
   margin: 5px;
