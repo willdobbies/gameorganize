@@ -29,6 +29,7 @@ def game_detail(id):
     game.name = request.form.get("name")
     game.platform = request.form.get("platform")
     game.completion = request.form.get("completion")
+    game.priority = request.form.get("priority")
     game.cheev = request.form.get("cheev")
     game.cheev_total = request.form.get("cheev_total")
     game.notes = request.form.get("notes")
@@ -50,6 +51,7 @@ def game_add():
       name = request.form.get("name"),
       platform = request.form.get("platform"),
       completion = request.form.get("completion"),
+      priority = request.form.get("priority"),
       cheev = request.form.get("cheev"),
       cheev_total = request.form.get("cheev_total"),
       notes = request.form.get("notes"),
