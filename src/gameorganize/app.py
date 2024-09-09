@@ -139,8 +139,9 @@ def game_import():
 @app.route("/", methods=['GET', 'POST'])
 def all_games():
   if request.method == 'POST':
-    print(request.form.to_dict())
-    return redirect(url_for("all_games"))
+    url_params = request.form.to_dict()
+    url_params = {k: v for k, v in url_params.items() if v}
+    return redirect(url_for("all_games", **url_params))
 
   args = request.args
   filters = []
