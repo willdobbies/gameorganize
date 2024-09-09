@@ -50,18 +50,9 @@
   <script>
     $(document).ready(function () {
       $('#data').DataTable({
-        paging: false,
+        paging: true,
         layout: {
-            topEnd: null,
-            bottomStart: {
-                'buttons':[
-                    {
-                        extend:'searchBuilder',
-                        config:{
-                        },
-                    }
-                ]
-            },
+            topEnd: 'searchBuilder',
             bottomEnd: 'paging'
         },
         columns: [

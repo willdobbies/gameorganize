@@ -138,7 +138,19 @@ def game_import():
 
 @app.route("/")
 def all_games():
-  all_games=db.session.query(GameEntry)
+  args = request.args
+  filters = []
+
+  if("platform" in args):
+    filters.append(args.get("platform") == GameEntry.platform)
+  if("completion" in args):
+    filters.append(args.get("completion") == GameEntry.completion)
+  if("cheev" in args):
+    filters.append(args.get("cheev") <= GameEntry.cheev)
+  
+  print(filters)
+
+  all_games=db.session.query(GameEntry).filter(*filters)
 
   return render_template(
     'list.html',
