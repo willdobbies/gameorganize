@@ -1,0 +1,7 @@
+<button data-toggle="collapse" data-target="#stats" class="btn btn-warning">Stats</button>
+<div id="stats" class="collapse">
+    {% for perc in stats["perc"] %}
+        <div>{{perc}}:</div>
+        <progress id="comp_perc" max="1.0" value="{{ stats['perc'][perc] }}"></progress>
+    {% endfor %}
+</div>
