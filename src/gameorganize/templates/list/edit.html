@@ -24,10 +24,16 @@
             <input type="text" class="form-control" name="platform">
             </select>
         </div>
+        
+        <div class="form-group">
+            <label for="name">Mass Actions</label>
+            <button type="submit" formaction="{{ url_for('mass_edit', action='delete') }}" class="btn btn-danger">Delete Selected</button>
+            </select>
+        </div>
 
+        <div>Changes will be applied to all selected game entries!</div>
         <div class="form-group">
             <button type="submit" class="btn btn-success">Apply</button>
-            <a href="{{ url_for('all_games') }}" class="btn btn-danger">Reset</a>
         </div>
     </form>
 </div>

@@ -171,18 +171,23 @@ def mass_edit():
       continue
     selected.append(game)
 
+  action = request.args.get("action", "modify")
+
   # Mass apply params
   for game in selected:
-    if(args.get("platform")):
-      game.platform = args.get("platform")
-    if(args.get("completion")):
-      game.completion = Completion(int(args.get("completion")))
-    if(args.get("priority")):
-      game.priority = Priority(int(args.get("priority")))
+    if(action == "delete"):
+      db.session.delete(game)
+    else:
+      if(args.get("platform")):
+        game.platform = args.get("platform")
+      if(args.get("completion")):
+        game.completion = Completion(int(args.get("completion")))
+      if(args.get("priority")):
+        game.priority = Priority(int(args.get("priority")))
 
   db.session.commit()
 
-  flash(f"Modified {len(selected)} games")
+  flash(f"{action} {len(selected)} games")
   return redirect(request.referrer)
 
 @app.route("/", methods=['GET', 'POST'])
