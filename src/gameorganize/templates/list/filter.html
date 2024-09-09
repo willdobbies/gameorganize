@@ -1,43 +1,23 @@
 <button data-toggle="collapse" data-target="#filter" class="btn btn-secondary">Filter</button>
 <div id="filter" class="collapse">
     <form action="" method="post">
-        <!--TEMP DISABLE MULTI COMPLETION/PRIO SELECTION -->
-        <!--div class="form-group">
-            <label for="name">Completion</label>
+        <div class="form-group">
+            <label for="name">Completion: </label>
             {% for type in Completion %}
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="completion" name="{{type}}">
                     <label class="form-check-label badge badge-{{ type.name.lower() }}" for="completion">{{type.name}}</label>
+                    <input class="form-check-input" type="checkbox" id="completion" name="completion" value="{{type.value}}">
                 </div>
             {% endfor %}
         </div>
         <div class="form-group">
-            <label for="name">Priority</label>
+            <label for="name">Priority: </label>
             {% for type in Priority %}
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="priority" name="{{type}}">
                     <label class="form-check-label" for="priority">{{type.name}}</label>
+                    <input class="form-check-input" type="checkbox" id="priority" name="priority" value="{{type.value}}">
                 </div>
             {% endfor %}
-        </div-->
-
-        <div class="form-group">
-            <label for="name">Completion</label>
-            <select class="form-control" name="completion">
-                <option></option>
-                {% for type in Completion %}
-                    <option>{{type.name}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="name">Priority</label>
-            <select class="form-control" name="priority">
-                <option></option>
-                {% for type in Priority %}
-                    <option>{{type.name}}</option>
-                {% endfor %}
-            </select>
         </div>
         <div class="form-group">
             <label for="name">Platform</label>

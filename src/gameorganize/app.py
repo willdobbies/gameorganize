@@ -3,7 +3,6 @@ from importers.retroachievements import ImporterRetroAchievements as ImporterRA
 from importers.steam import ImporterSteam
 from model.game import GameEntry, Completion, Priority
 from model.game import db
-import re
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '7103fd2f0697987fef0626de455aeb8617f8318c2ecaad41'
@@ -164,20 +163,14 @@ def mass_edit():
   args = request.form.to_dict()
 
   # Get all selected IDs
-  selected = []
-  for key in args:
-    if(not key.endswith(".selected")): 
-      continue
-    gameid = re.sub(".selected", "", key)
-    try:
-      gameid = int(gameid)
-    except Exception as e:
-      print(e)
+  selected = [] 
+  
+  for gameid in request.form.getlist('selected'):
     game = db.session.get(GameEntry, gameid)
     if(not game):
       continue
     selected.append(game)
-  
+
   # Mass apply params
   for game in selected:
     if(args.get("platform")):
@@ -192,11 +185,18 @@ def mass_edit():
   flash(f"Modified {len(selected)} games")
   return redirect(request.referrer)
 
+from sqlalchemy import or_
+
 @app.route("/", methods=['GET', 'POST'])
 def all_games():
   if request.method == 'POST':
+
     url_params = request.form.to_dict()
+    url_params["priority"] = request.form.getlist("priority")
+    url_params["completion"] = request.form.getlist("completion")
+
     url_params = {k: v for k, v in url_params.items() if v}
+
     return redirect(url_for("all_games", **url_params))
 
   args = request.args
@@ -204,12 +204,20 @@ def all_games():
 
   if("platform" in args):
     filters.append(args.get("platform") == GameEntry.platform)
+
   if("priority" in args):
-    filters.append(args.get("priority") == GameEntry.priority)
+    all_priority = args.getlist("priority")
+    for idx, val in enumerate(all_priority):
+      all_priority[idx] = Priority(int(all_priority[idx]))
+    print(all_priority)
+    filters.append(GameEntry.priority.in_(all_priority))
+
   if("completion" in args):
-    filters.append(args.get("completion") == GameEntry.completion)
-  if("cheev" in args):
-    filters.append(args.get("cheev") <= GameEntry.cheev)
+    all_completion = args.getlist("completion")
+    for idx, val in enumerate(all_completion):
+      all_completion[idx] = Completion(int(all_completion[idx]))
+    print(all_completion)
+    filters.append(GameEntry.completion.in_(all_completion))
   
   #really ugly 'get all platforms' method. TODO: Make seperate table
   all_platforms=[plat[0] for plat in db.session.query(GameEntry.platform).distinct()]
