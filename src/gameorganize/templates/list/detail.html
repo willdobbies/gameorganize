@@ -2,11 +2,14 @@
 
 {% block content %}
 
+{% include "list/stats.html" %}
+
+<br>
+
 <a href="{{ url_for('game_add')}}" class="btn btn-success">New</a>
 <a href="{{ url_for('game_import')}}" class="btn btn-primary">Import</a>
 
 {% include "list/filter.html" %}
-{% include "list/stats.html" %}
 {% include "list/edit.html" %}
 
 <form id="gamelist" action="" method="post">

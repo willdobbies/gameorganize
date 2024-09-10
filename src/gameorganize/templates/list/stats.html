@@ -1,7 +1,12 @@
-<button data-toggle="collapse" data-target="#stats" class="btn btn-warning">Stats</button>
-<div id="stats" class="collapse">
-    {% for perc in stats["perc"] %}
-        <div>{{perc}}:</div>
-        <progress id="comp_perc" max="1.0" value="{{ stats['perc'][perc] }}"></progress>
-    {% endfor %}
+<!--button data-toggle="collapse" data-target="#stats" class="btn btn-warning">Stats</button>
+<div id="stats" class="collapse container"-->
+<div id="stats" class="container">
+    <div class="row">
+        {% for perc in stats["perc"] %}
+            <div class="col-sm container">
+                <div class="row">{{perc.name}}:</div>
+                <progress class="row" id="comp_perc" max="1.0" value="{{ stats['perc'][perc] }}"></progress>
+            </div>
+        {% endfor %}
+    </div>
 </div>

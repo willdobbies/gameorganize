@@ -136,9 +136,22 @@ def game_import():
             new_game = GameEntry(
               name = line.get("Name"),
               platform = line.get("Platform"),
-              completion = Completion[line.get("Completion")],
-              notes = line.get("Notes"),
             )
+
+            if("Completion" in line):
+              new_game.completion = Completion[line.get("Completion")]
+
+            if("Priority" in line):
+              new_game.priority = Priority[line.get("Priority")]
+            
+            if("Notes" in line):
+              new_game.notes = line.get("Notes")
+
+            if("Cheev" in line):
+              new_game.cheev = int(line.get("Cheev"))
+
+            if("CheevTotal" in line):
+              new_game.cheev_total = int(line.get("CheevTotal"))
 
             try:
               db.session.add(new_game)
