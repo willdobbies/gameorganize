@@ -39,7 +39,7 @@
         </td>
         <td>
             <div class="badge badge-{{ game.completion.name.lower() }}">
-                <a class="plainlink" href="{{ url_for('all_games', completion=game.completion.name) }}">{{ game.completion.name }}</a>
+                <a class="plainlink" href="{{ url_for('all_games', completion=game.completion.value) }}">{{ game.completion.name }}</a>
             </div>
         </td>
         <td>
@@ -50,20 +50,39 @@
                     🏆
                 </div>
             {% else %}
-            N/A
             {% endif %}
         </td>
         <td>
-            <a class="plainlink" href="{{ url_for('all_games', priority=game.priority.name) }}">{{ game.priority.name }}</a>
+            <a class="plainlink" href="{{ url_for('all_games', priority=game.priority.value) }}">{{ game.priority.name }}</a>
         </td>
         <td>
-            {{ game.notes }}
+            {% if game.notes %}
+                <button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#notesModal">View</button>
+                <!--input type="button" class="btn btn-secondary" id="notesButton" data-name="{{game.name}}" data-toggle="modal" data-target="#notesModal" value="View"/-->
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
 </tbody>
 </table>
 </form>
+
+<div class="modal" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Notes</h5>
+      </div>
+      <div class="modal-body">
+        <div id="modalNotes"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {%endblock%}
 
 {% block scripts %}
@@ -99,5 +118,24 @@
             });
         }
     }); 
+
+    $(document).on('show.bs.modal','#notesModal', function () {
+        alert('hi');
+    })
+
+    $(document).ready(
+        console.log($("#notesModal"))
+    )
+
+    $("#notesModal").on('show.bs.modal', function (event) {
+        alert('hi')
+        /*var button = $(event.relatedTarget) // Button that triggered the modal
+        var name = button.data('name')
+        alert(name)
+        //var notes = button.data('notes')
+        var modal = $(this)
+        modal.find('.modal-title').text(name + ' Notes')
+        //modal.find('.modalNotes').val(notes)*/
+    });
   </script>
 {% endblock %}

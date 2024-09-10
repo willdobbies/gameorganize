@@ -1,12 +1,35 @@
-<!--button data-toggle="collapse" data-target="#stats" class="btn btn-warning">Stats</button>
-<div id="stats" class="collapse container"-->
 <div id="stats" class="container">
+<div class="container">
     <div class="row">
-        {% for perc in stats["perc"] %}
-            <div class="col-sm container">
-                <div class="row">{{perc.name}}:</div>
-                <progress class="row" id="comp_perc" max="1.0" value="{{ stats['perc'][perc] }}"></progress>
+    {% for completion in stats %}
+        {% if completion == Completion.Unplayed %}
+            {% set color = 'primary' %}
+        {% elif completion == Completion.Started %}
+            {% set color = 'danger' %}
+        {% elif completion == Completion.Beaten %}
+            {% set color = 'success' %}
+        {% elif completion == Completion.Completed %}
+            {% set color = 'warning' %}
+        {% elif completion == Completion.Endless %}
+            {% set color = 'secondary' %}
+        {% else %}
+            {% set color = 'secondary' %}
+        {% endif %}
+
+        <div class="col-sm">
+            <a class="plainlink" href="{{url_for('all_games', completion=completion.value)}}">{{completion.name}}</a>
+            <div class="progress">
+                <div 
+                    class="progress-bar bg-{{color}}" 
+                    role="progressbar" 
+                    style="width: {{stats[completion]}}%" 
+                    aria-valuenow="{{stats[completion]}}" 
+                    aria-valuemin="0" 
+                    aria-valuemax="100">
+                </div>
             </div>
-        {% endfor %}
+        </div>
+    {% endfor %}
     </div>
+</div>
 </div>

@@ -186,22 +186,23 @@ def game_import():
   )
 
 def get_stats(games):
-  perc = {}
+  stats = {}
 
   total = len([game for game in games])
 
   for comp in Completion:
+    if(comp is Completion.Null):
+      continue
+
     filtered_games = [game for game in games if game.completion == comp]
 
     if(total == 0):
-      perc[comp]=0
+      stats[comp]=0
       continue
 
-    perc[comp] = len(filtered_games) / total
+    stats[comp] = (len(filtered_games) / total)*100
 
-  return {
-    "perc":perc
-  }
+  return stats
 
 @app.route("/massedit", methods=['POST'])
 def mass_edit():
