@@ -200,7 +200,7 @@ def get_stats(games):
       stats[comp]=0
       continue
 
-    stats[comp] = (len(filtered_games) / total)*100
+    stats[comp] = int((len(filtered_games) / total)*100)
 
   return stats
 
