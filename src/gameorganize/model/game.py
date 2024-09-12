@@ -18,6 +18,19 @@ class Completion(enum.Enum):
     Completed = 3
     Endless = 4
 
+    def get_color(self):
+        if (self == self.Unplayed):
+            return 'primary'
+        elif (self == self.Started):
+            return 'danger'
+        elif (self == self.Beaten):
+            return 'success'
+        elif (self == self.Completed):
+            return 'warning'
+        elif (self == self.Endless):
+            return 'secondary'
+        return "secondary"
+
 class Ownership(enum.Enum):
     Physical = 0
     Digital = 1

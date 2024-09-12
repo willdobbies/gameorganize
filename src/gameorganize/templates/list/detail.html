@@ -38,7 +38,7 @@
             <a class="plainlink" href="{{ url_for('all_games', platform=game.platform) }}">{{ game.platform }}</a>
         </td>
         <td>
-            <div class="badge badge-{{ game.completion.name.lower() }}">
+            <div class="badge bg-{{game.completion.get_color()}}">
                 <a class="plainlink" href="{{ url_for('all_games', completion=game.completion.value) }}">{{ game.completion.name }}</a>
             </div>
         </td>

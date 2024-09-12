@@ -2,25 +2,11 @@
 <div class="container">
     <div class="row">
     {% for completion in stats %}
-        {% if completion == Completion.Unplayed %}
-            {% set color = 'primary' %}
-        {% elif completion == Completion.Started %}
-            {% set color = 'danger' %}
-        {% elif completion == Completion.Beaten %}
-            {% set color = 'success' %}
-        {% elif completion == Completion.Completed %}
-            {% set color = 'warning' %}
-        {% elif completion == Completion.Endless %}
-            {% set color = 'secondary' %}
-        {% else %}
-            {% set color = 'secondary' %}
-        {% endif %}
-
         <div class="col-sm">
             <a class="plainlink" href="{{url_for('all_games', completion=completion.value)}}">{{completion.name}}</a>
             <div class="progress">
                 <div 
-                    class="progress-bar bg-{{color}}" 
+                    class="progress-bar bg-{{completion.get_color()}}" 
                     role="progressbar" 
                     style="width: {{stats[completion]}}%" 
                     aria-valuenow="{{stats[completion]}}" 
