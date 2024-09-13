@@ -1,4 +1,4 @@
-from model.game import GameEntry, Completion, Priority, Ownership
+from gameorganize.model.game import GameEntry, Completion, Priority, Ownership
 
 def test_entries():
     # Add some games

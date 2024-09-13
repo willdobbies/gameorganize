@@ -1,5 +1,5 @@
-from importers.steam import ImporterSteam
-from model.game import Completion
+from gameorganize.importers.steam import ImporterSteam
+from gameorganize.model.game import Completion
 from pathlib import Path
 import json
 import pytest

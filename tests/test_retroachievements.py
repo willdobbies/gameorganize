@@ -1,4 +1,4 @@
-from importers.retroachievements import ImporterRA
+from gameorganize.importers.retroachievements import ImporterRA
 from pathlib import Path
 import json
 import pytest
