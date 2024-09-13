@@ -1,8 +1,8 @@
 import requests
 
-from gameorganize.model.game import GameEntry, Completion
+from model.game import GameEntry, Completion
 
-class ImporterRetroAchievements():
+class ImporterRA():
     def __init__(self, username:str, api_key:str):
         self.username = username
         self.api_key = api_key

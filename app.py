@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, url_for, redirect, flash
-from importers.retroachievements import ImporterRetroAchievements as ImporterRA
+from importers.retroachievements import ImporterRA
 from importers.steam import ImporterSteam
 from model.game import GameEntry, Completion, Priority
-from model.game import db
-import csv 
+from db import db
+import csv
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '7103fd2f0697987fef0626de455aeb8617f8318c2ecaad41'
@@ -14,7 +14,7 @@ app.config['UPLOAD_FOLDER'] = "./instance/"
 # setup sqlalchemy
 db.init_app(app)
 
-# Create the database tables.
+# Create the database tables and start app
 with app.app_context():
   db.create_all()
 

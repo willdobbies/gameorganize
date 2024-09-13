@@ -1,6 +1,6 @@
-from gameorganize.model.game import Completion
+from importers.steam import ImporterSteam
+from model.game import Completion
 from pathlib import Path
-from steam import ImporterSteam
 import json
 import pytest
 
@@ -14,7 +14,7 @@ def test_fetch(apiId, apiKey):
     assert (fdata is not None)
 
     print(f"Fetched data for {len(fdata)} games")
-    with open(basedir / "test/steam.json", "w") as buf:
+    with open(basedir / "data/steam.json", "w") as buf:
         json.dump(fdata, buf)
 
 @pytest.mark.skip(reason="reduce server stress")
@@ -32,7 +32,7 @@ def test_completion():
     completion_null = importer.get_completion(0, {})
     assert completion_null[0] == Completion.Unplayed
 
-    with open(basedir / "test/steam-cheev1.json", "r") as buf:
+    with open(basedir / "data/steam-cheev1.json", "r") as buf:
         stats = json.loads(buf.read())
         completion = importer.get_completion(
             1000,
@@ -41,7 +41,7 @@ def test_completion():
 
         assert completion[0] == Completion.Started
 
-    with open(basedir / "test/steam-cheev3.json", "r") as buf:
+    with open(basedir / "data/steam-cheev3.json", "r") as buf:
         stats = json.loads(buf.read())
         completion = importer.get_completion(
             1000,
@@ -57,7 +57,7 @@ def test_completion():
 def test_parse():
     importer = ImporterSteam(None, None)
 
-    with open(basedir / "test/steam.json", "r") as buf:
+    with open(basedir / "data/steam.json", "r") as buf:
         data = json.loads(buf.read())
         games = importer.parse(data)
         #print(games)

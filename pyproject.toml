@@ -1,5 +1,6 @@
 [project]
 name = "gameorganize"
+description = "A simple, functional, self-hosted game collection tracker."
 dynamic = ["version"]
 dependencies = [
     "pytest", 
@@ -10,3 +11,30 @@ dependencies = [
     "flask_sqlalchemy"
 ]
 requires-python = ">= 3.8"
+readme = "README.md"
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.module]
+name = "gameorganize"
+
+[tool.flit.sdist]
+include = [
+    "tests/",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["error"]
+
+[tool.coverage.run]
+branch = true
+source = ["tests"]
+
+[tool.ruff]
+src = ["src"]
