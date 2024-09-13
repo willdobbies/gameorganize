@@ -2,15 +2,15 @@
 
 {% block content %}
 
-{% include "list/stats.html" %}
+{% include "gamelist/stats.html" %}
 
 <br>
 
-<a href="{{ url_for('game_add')}}" class="btn btn-success">New</a>
-<a href="{{ url_for('game_import')}}" class="btn btn-primary">Import</a>
+<a href="{{ url_for('game.add')}}" class="btn btn-success">New</a>
+<a href="{{ url_for('importer.detail')}}" class="btn btn-primary">Import</a>
 
-{% include "list/filter.html" %}
-{% include "list/edit.html" %}
+{% include "gamelist/filter.html" %}
+{% include "gamelist/edit.html" %}
 
 <form id="gamelist" action="" method="post">
 <table id="data" class="table table-striped">
@@ -32,14 +32,14 @@
             <input form="editform" name="selected" value="{{game.id}}" type="checkbox">
         </td>
         <td>
-            <a href="{{ url_for ('game_detail', id=game.id) }}">{{ game.name }}</a>
+            <a href="{{ url_for ('game.detail', id=game.id) }}">{{ game.name }}</a>
         </td>
         <td>
-            <a class="plainlink" href="{{ url_for('all_games', platform=game.platform) }}">{{ game.platform }}</a>
+            <a class="plainlink" href="{{ url_for('gamelist.detail', platform=game.platform) }}">{{ game.platform }}</a>
         </td>
         <td>
             <div class="badge bg-{{game.completion.get_color()}}">
-                <a class="plainlink" href="{{ url_for('all_games', completion=game.completion.value) }}">{{ game.completion.name }}</a>
+                <a class="plainlink" href="{{ url_for('gamelist.detail', completion=game.completion.value) }}">{{ game.completion.name }}</a>
             </div>
         </td>
         <td>
@@ -53,7 +53,7 @@
             {% endif %}
         </td>
         <td>
-            <a class="plainlink" href="{{ url_for('all_games', priority=game.priority.value) }}">{{ game.priority.name }}</a>
+            <a class="plainlink" href="{{ url_for('gamelist.detail', priority=game.priority.value) }}">{{ game.priority.name }}</a>
         </td>
         <td>
             {% if game.notes %}

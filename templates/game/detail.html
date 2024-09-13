@@ -44,8 +44,8 @@
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-success">Save</button>
-        <a href="{{ url_for('all_games') }}" class="btn btn-secondary">Cancel</a>
-        <a href="{{ url_for('game_delete', id=game.id) }}" class="btn btn-danger">Delete</a>
+        <a href="{{ url_for('gamelist.detail') }}" class="btn btn-secondary">Cancel</a>
+        <a href="{{ url_for('game.delete', id=game.id) }}" class="btn btn-danger">Delete</a>
     </div>
     <input type="hidden" name="id" value="{{ game.id }}" />
 </form>
