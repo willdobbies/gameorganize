@@ -1,5 +1,5 @@
+from gameorganize.db import db
 from sqlalchemy.orm import Mapped, mapped_column
-from db import db
 import enum
 
 class Completion(enum.Enum):

@@ -1,6 +1,5 @@
+from gameorganize.model.game import GameEntry, Completion
 import requests
-
-from model.game import GameEntry, Completion
 
 class ImporterRA():
     def __init__(self, username:str, api_key:str):

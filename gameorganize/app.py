@@ -1,8 +1,8 @@
-from db import db
+from .db import db
+from .game import game
+from .gamelist import gamelist
+from .importer import importer
 from flask import Flask
-from game import game
-from gamelist import gamelist
-from importer import importer
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '7103fd2f0697987fef0626de455aeb8617f8318c2ecaad41'

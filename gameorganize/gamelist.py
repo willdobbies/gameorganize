@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
-from model.game import GameEntry, Completion, Priority
-from db import db
+from .model.game import GameEntry, Completion, Priority
+from .db import db
 
 gamelist = Blueprint('gamelist', __name__, template_folder='templates')
 

@@ -1,9 +1,9 @@
+from .db import db
+from .importers.retroachievements import ImporterRA
+from .importers.steam import ImporterSteam
+from .model.game import GameEntry, Completion, Priority
 from flask import Blueprint, render_template, request, url_for, redirect, flash
-from importers.retroachievements import ImporterRA
-from importers.steam import ImporterSteam
-from model.game import GameEntry, Completion, Priority
 import csv
-from db import db
 
 importer = Blueprint('importer', __name__, template_folder='templates')
 

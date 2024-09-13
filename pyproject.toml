@@ -1,7 +1,7 @@
 [project]
 name = "gameorganize"
 description = "A simple, functional, self-hosted game collection tracker."
-dynamic = ["version"]
+version = "1.0.0"
 dependencies = [
     "pytest", 
     "coverage",

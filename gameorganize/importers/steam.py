@@ -1,4 +1,4 @@
-from model.game import GameEntry, Completion, Ownership
+from gameorganize.model.game import GameEntry, Completion, Ownership
 import requests
 
 class ImporterSteam():

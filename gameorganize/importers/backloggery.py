@@ -1,6 +1,5 @@
+from gameorganize.model.game import GameEntry, Completion
 import csv 
-
-from model.game import GameEntry, Completion
 
 # Library columns:
 #    "Unique Game ID", "Title", "Platform", "Sub-Platform",
