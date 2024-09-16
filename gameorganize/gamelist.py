@@ -66,7 +66,7 @@ def detail():
 
     url_params = {k: v for k, v in url_params.items() if v}
 
-    return redirect(url_for("detail", **url_params))
+    return redirect(url_for("gamelist.detail", **url_params))
 
   args = request.args
   filters = []
