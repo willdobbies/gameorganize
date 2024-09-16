@@ -1,5 +1,5 @@
 # Overview
-A simple, self-hosted game progress tracker. Heavily inspired by Backloggery.
+A simple, self-hosted game progress tracker. Heavily inspired by [Backloggery](https://backloggery.com/).
 
 # Features
 - Catalog your game collection spanning across various platforms and formats
