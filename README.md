@@ -1,10 +1,32 @@
 # Overview
-A simple, functional, self-hosted game collection tracker. Inspired by backloggery.
+A simple, self-hosted game progress tracker. Heavily inspired by Backloggery.
 
 # Features
 - Catalog your game collection spanning across various platforms and formats
 - Set individual game ownership, completion status, achievements, and more
-- Import existing libraries from popular online storefronts like Steam and GOG
+- Import existing progress from popular digital platforms like Steam and RetroAchievements
 
-# Maybefeatures
-- Utilize IGDB to fill out the metadata, or manually create the entries yourself.
+# Installation
+
+Clone the repository and install the module
+```bash
+git clone https://github.com/ccriddler/gameorganize/
+cd gameorganize
+pip install -e .
+```
+
+Alternatively, use pip to install it automatically
+```bash
+pip install git+https://github.com/ccriddler/gameorganize.git
+```
+
+# Running
+Once the python module is installed, you can run it in development mode with the command:
+```bash
+flask run --app gameorganize:app
+```
+
+To run as a deployed, persistant webapp, use gunicorn or another WSGI server of your choice
+```bash
+gunicorn -w 3 --bind 0.0.0.0:5003 gameorganize:app
+```
