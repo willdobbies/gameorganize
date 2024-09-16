@@ -3,10 +3,10 @@
     <form action="" method="post">
         <div class="form-group">
             <label for="name">Completion: </label>
-            {% for type in Completion %}
+            {% for completion in Completion %}
                 <div class="form-check form-check-inline">
-                    <label class="form-check-label badge badge-{{ type.name.lower() }}" for="completion">{{type.name}}</label>
-                    <input class="form-check-input" type="checkbox" id="completion" name="completion" value="{{type.value}}">
+                    <label class="form-check-label badge bg-{{completion.get_color()}}" for="completion">{{completion.name}}</label>
+                    <input class="form-check-input" type="checkbox" id="completion" name="completion" value="{{completion.value}}">
                 </div>
             {% endfor %}
         </div>
