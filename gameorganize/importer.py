@@ -2,6 +2,7 @@ from .db import db
 from .importers.retroachievements import ImporterRA
 from .importers.steam import ImporterSteam
 from .model.game import GameEntry, Completion, Priority
+from .model.platform import Platform
 from flask import Blueprint, render_template, request, url_for, redirect, flash
 import csv
 
@@ -47,32 +48,41 @@ def import_csv(data):
   new_games = []
 
   for line in csv_reader:
-      new_game = GameEntry(
-        name = line.get("Name"),
-        platform = line.get("Platform"),
+    new_platform = db.query(Platform).filter(name=line.get("Platform"))
+
+    if(not new_platform):
+      new_platform = Platform(
+        name = line.get("Platform"),
       )
+      db.session.add(new_platform)
+      db.session.commit()
 
-      if("Completion" in line):
-        new_game.completion = Completion[line.get("Completion")]
+    new_game = GameEntry(
+      name = line.get("Name"),
+      platform_id = new_platform.id,
+    )
 
-      if("Priority" in line):
-        new_game.priority = Priority[line.get("Priority")]
-      
-      if("Notes" in line):
-        new_game.notes = line.get("Notes")
+    if("Completion" in line):
+      new_game.completion = Completion[line.get("Completion")]
 
-      if("Cheev" in line):
-        new_game.cheev = int(line.get("Cheev"))
+    if("Priority" in line):
+      new_game.priority = Priority[line.get("Priority")]
+    
+    if("Notes" in line):
+      new_game.notes = line.get("Notes")
 
-      if("CheevTotal" in line):
-        new_game.cheev_total = int(line.get("CheevTotal"))
+    if("Cheev" in line):
+      new_game.cheev = int(line.get("Cheev"))
 
-      try:
-        db.session.add(new_game)
-        db.session.commit()
-      except Exception as e:
-        db.session.rollback()
-        flash(f"DB Errorr: {e}")
+    if("CheevTotal" in line):
+      new_game.cheev_total = int(line.get("CheevTotal"))
+
+    try:
+      db.session.add(new_game)
+      db.session.commit()
+    except Exception as e:
+      db.session.rollback()
+      flash(f"DB Errorr: {e}")
 
   return new_games
 

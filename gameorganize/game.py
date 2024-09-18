@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
 from .model.game import GameEntry, Completion, Priority
+from .model.platform import Platform
 from .db import db
 
 game = Blueprint('game', __name__, template_folder='templates')
@@ -15,7 +16,7 @@ def detail(id):
 
   if request.method == 'POST':
     game.name = request.form.get("name")
-    game.platform = request.form.get("platform")
+    game.platform_id = request.form.get("platform")
     game.completion = request.form.get("completion")
     game.priority = request.form.get("priority")
     game.cheev = request.form.get("cheev")
@@ -25,9 +26,12 @@ def detail(id):
     flash(f"Updated: Game {game.name}")
     return redirect(url_for('game.detail', id=id))
 
+  all_platforms=db.session.query(Platform)
+
   return render_template(
     'game/detail.html',
     game=game,
+    all_platforms=all_platforms,
     Completion=Completion,
     Priority=Priority
   )
@@ -37,7 +41,7 @@ def add():
   if request.method == 'POST':
     new_game = GameEntry(
       name = request.form.get("name"),
-      platform = request.form.get("platform"),
+      platform_id = request.form.get("platform"),
       completion = request.form.get("completion"),
       priority = request.form.get("priority"),
       cheev = request.form.get("cheev"),
@@ -54,8 +58,11 @@ def add():
     flash(f"Added new game {new_game.name}")
     return redirect(url_for('gamelist.detail'))
 
+  all_platforms=db.session.query(Platform)
+
   return render_template(
     'game/add.html',
+    all_platforms=all_platforms,
     Completion=Completion,
     Priority=Priority
   )

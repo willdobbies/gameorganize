@@ -8,7 +8,8 @@ dependencies = [
     "flask", 
     "requests",
     "typing_extensions",
-    "flask_sqlalchemy"
+    "flask_sqlalchemy",
+    "flask_migrate",
 ]
 requires-python = ">= 3.8"
 readme = "README.md"

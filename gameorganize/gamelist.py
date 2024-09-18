@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
 from .model.game import GameEntry, Completion, Priority
+from .model.platform import Platform
 from .db import db
 
 gamelist = Blueprint('gamelist', __name__, template_folder='templates')
@@ -44,7 +45,7 @@ def edit():
       db.session.delete(game)
     else:
       if(args.get("platform")):
-        game.platform = args.get("platform")
+        game.platform_id = args.get("platform")
       if(args.get("completion")):
         game.completion = Completion(int(args.get("completion")))
       if(args.get("priority")):
@@ -62,7 +63,7 @@ def detail():
     url_params = request.form.to_dict()
     url_params["priority"] = request.form.getlist("priority")
     url_params["completion"] = request.form.getlist("completion")
-    url_params["platform"] = request.form.getlist("platform")
+    url_params["platform_id"] = request.form.getlist("platform_id")
 
     url_params = {k: v for k, v in url_params.items() if v}
 
@@ -71,26 +72,25 @@ def detail():
   args = request.args
   filters = []
 
-  if("platform" in args):
-    all_platform = args.getlist("platform")
-    filters.append(GameEntry.platform.in_(all_platform))
+  if("platform_id" in args):
+    f_platform_id = args.getlist("platform_id")
+    filters.append(GameEntry.platform_id.in_(f_platform_id))
 
   if("priority" in args):
-    all_priority = args.getlist("priority")
-    for idx, val in enumerate(all_priority):
-      all_priority[idx] = Priority(int(all_priority[idx]))
-    print(all_priority)
-    filters.append(GameEntry.priority.in_(all_priority))
+    f_priority = args.getlist("priority")
+    for idx, val in enumerate(f_priority):
+      f_priority[idx] = Priority(int(f_priority[idx]))
+    print(f_priority)
+    filters.append(GameEntry.priority.in_(f_priority))
 
   if("completion" in args):
-    all_completion = args.getlist("completion")
-    for idx, val in enumerate(all_completion):
-      all_completion[idx] = Completion(int(all_completion[idx]))
-    print(all_completion)
-    filters.append(GameEntry.completion.in_(all_completion))
+    f_completion = args.getlist("completion")
+    for idx, val in enumerate(f_completion):
+      f_completion[idx] = Completion(int(f_completion[idx]))
+    print(f_completion)
+    filters.append(GameEntry.completion.in_(f_completion))
   
-  #really ugly 'get all platforms' method. TODO: Make seperate table
-  all_platforms=[plat[0] for plat in db.session.query(GameEntry.platform).distinct()]
+  all_platforms=db.session.query(Platform)
   all_games=db.session.query(GameEntry).filter(*filters)
 
   stats = get_stats(all_games)

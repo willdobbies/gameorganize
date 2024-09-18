@@ -35,7 +35,7 @@
             <a href="{{ url_for ('game.detail', id=game.id) }}">{{ game.name }}</a>
         </td>
         <td>
-            <a class="plainlink" href="{{ url_for('gamelist.detail', platform=game.platform) }}">{{ game.platform }}</a>
+            <a class="plainlink" href="{{ url_for('gamelist.detail', platform_id=game.platform_id) }}">{{ game.platform.name }}</a>
         </td>
         <td>
             <div class="badge bg-{{game.completion.get_color()}}">

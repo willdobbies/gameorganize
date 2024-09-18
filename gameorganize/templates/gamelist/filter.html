@@ -23,8 +23,8 @@
             <label for="name">Platform: </label>
             {% for platform in all_platforms %}
                 <div class="form-check form-check-inline">
-                    <label class="form-check-label" for="platform">{{platform}}</label>
-                    <input class="form-check-input" type="checkbox" id="priority" name="platform" value="{{platform}}">
+                    <label class="form-check-label" for="platform_id">{{platform.name}}</label>
+                    <input class="form-check-input" type="checkbox" id="priority" name="platform_id" value="{{platform.id}}">
                 </div>
             {% endfor %}
             </select>

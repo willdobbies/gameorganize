@@ -3,6 +3,7 @@ from .game import game
 from .gamelist import gamelist
 from .importer import importer
 from flask import Flask
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '7103fd2f0697987fef0626de455aeb8617f8318c2ecaad41'
@@ -17,6 +18,9 @@ app.register_blueprint(importer, url_prefix='/import')
 
 # setup sqlalchemy
 db.init_app(app)
+
+# setup migrations
+migrate = Migrate(app, db)
 
 # Create the database tables and start app
 with app.app_context():
