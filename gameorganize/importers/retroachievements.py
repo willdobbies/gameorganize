@@ -1,4 +1,5 @@
 from gameorganize.model.game import GameEntry, Completion
+from gameorganize.model.platform import add_or_find_platform
 import requests
 
 class ImporterRA():
@@ -37,7 +38,7 @@ class ImporterRA():
 
             new_game = GameEntry(
                 name = entry.get("Title"),
-                platform = entry.get("ConsoleName"),
+                platform_id = add_or_find_platform(entry.get("ConsoleName")).id,
                 completion = completion,
                 cheev = entry.get("NumAwarded", 0),
                 cheev_total = entry.get("MaxPossible", 0)

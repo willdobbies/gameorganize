@@ -1,4 +1,5 @@
 from gameorganize.model.game import GameEntry, Completion, Ownership
+from gameorganize.model.platform import add_or_find_platform
 import requests
 
 class ImporterSteam():
@@ -82,7 +83,7 @@ class ImporterSteam():
 
             new_game = GameEntry(
                 name = entry.get("name"),
-                platform = "Steam",
+                platform = add_or_find_platform("Steam"),
                 completion = completion,
                 ownership = Ownership.Digital,
                 cheev = len(cheev_got),

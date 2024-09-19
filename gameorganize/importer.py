@@ -2,7 +2,7 @@ from .db import db
 from .importers.retroachievements import ImporterRA
 from .importers.steam import ImporterSteam
 from .model.game import GameEntry, Completion, Priority
-from .model.platform import Platform
+from .model.platform import Platform, add_or_find_platform
 from flask import Blueprint, render_template, request, url_for, redirect, flash
 import csv
 
@@ -48,14 +48,7 @@ def import_csv(data):
   new_games = []
 
   for line in csv_reader:
-    new_platform = db.session.query(Platform).where(Platform.name==line.get("Platform")).first()
-
-    if(not new_platform):
-      new_platform = Platform(
-        name = line.get("Platform"),
-      )
-      db.session.add(new_platform)
-      db.session.commit()
+    new_platform = add_or_find_platform(line.get("Platform")) 
 
     new_game = GameEntry(
       name = line.get("Name"),
@@ -96,23 +89,23 @@ def detail():
 
     new_games = []
 
-    #try:
-    if(site == "Steam"):
-      new_games = import_steam(apiId, apiKey)
+    try:
+      if(site == "Steam"):
+        new_games = import_steam(apiId, apiKey)
 
-    elif(site == "RetroAchievements"):
-      new_games = import_ra(apiId, apiKey)
+      elif(site == "RetroAchievements"):
+        new_games = import_ra(apiId, apiKey)
 
-    elif(site == "CSV"):
-      new_games = import_csv(csvdata)
+      elif(site == "CSV"):
+        new_games = import_csv(csvdata)
 
-    else:
-      flash(f"Invalid site {site}")
+      else:
+        flash(f"Invalid site {site}")
+        return redirect(url_for('importer.detail'))
+
+    except Exception as e:
+      flash(f"Error importing from {site}, : {e}")
       return redirect(url_for('importer.detail'))
-
-    #except Exception as e:
-    #flash(f"Error importing from {site}, : {e}")
-    return redirect(url_for('importer.detail'))
 
     added = 0
     for game in new_games:

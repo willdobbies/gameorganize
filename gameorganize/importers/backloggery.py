@@ -1,4 +1,5 @@
 from gameorganize.model.game import GameEntry, Completion
+from gameorganize.model.platform import add_or_find_platform
 import csv 
 
 # Library columns:
@@ -35,7 +36,7 @@ class ImporterBackloggery():
 
             new_games.append(GameEntry(
                 name = entry.get("Title"),
-                platform = entry.get("Platform"),
+                platform_id = add_or_find_platform(entry.get("Platform")).id,
                 completion = Completion[completion_name],
                 notes = entry.get("Notes", ""),
             ))
