@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+{% for platform in all_platforms %}
+<div class="form-group">
+    <label for="name">{{platform.name}}</label>
+    <a href="{{ url_for('platform.delete', id=platform.id) }}" class="btn btn-danger">Delete</a>
+</div>
+{% endfor %}
+<a href="{{url_for('platform.add')}}" class="btn btn-success">Add</a>
+{% endblock %}

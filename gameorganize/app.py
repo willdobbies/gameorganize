@@ -2,6 +2,7 @@ from .db import db
 from .game import game
 from .gamelist import gamelist
 from .importer import importer
+from .platform import platform
 from flask import Flask
 from flask_migrate import Migrate
 
@@ -15,6 +16,7 @@ app.config['UPLOAD_FOLDER'] = "./instance/"
 app.register_blueprint(game, url_prefix='/game')
 app.register_blueprint(gamelist)
 app.register_blueprint(importer, url_prefix='/import')
+app.register_blueprint(platform, url_prefix='/platform')
 
 # setup sqlalchemy
 db.init_app(app)
