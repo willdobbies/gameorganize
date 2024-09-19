@@ -4,9 +4,9 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 class Platform(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(unique=True)
+    name: Mapped[str] = mapped_column(unique=True, nullable=False)
 
-@event.listens_for(Platform.__table__, 'after_create')
+#@event.listens_for(Platform.__table__, 'after_create')
 def platform_after_create(target, connection, **kw):
     print("Prefilling Platform values")
     default_names = [

@@ -48,7 +48,7 @@ def import_csv(data):
   new_games = []
 
   for line in csv_reader:
-    new_platform = db.query(Platform).filter(name=line.get("Platform"))
+    new_platform = db.session.query(Platform).where(Platform.name==line.get("Platform")).first()
 
     if(not new_platform):
       new_platform = Platform(
@@ -96,23 +96,23 @@ def detail():
 
     new_games = []
 
-    try:
-      if(site == "Steam"):
-        new_games = import_steam(apiId, apiKey)
+    #try:
+    if(site == "Steam"):
+      new_games = import_steam(apiId, apiKey)
 
-      elif(site == "RetroAchievements"):
-        new_games = import_ra(apiId, apiKey)
+    elif(site == "RetroAchievements"):
+      new_games = import_ra(apiId, apiKey)
 
-      elif(site == "CSV"):
-        new_games = import_csv(csvdata)
+    elif(site == "CSV"):
+      new_games = import_csv(csvdata)
 
-      else:
-        flash(f"Invalid site {site}")
-        return redirect(url_for(importer.detail))
+    else:
+      flash(f"Invalid site {site}")
+      return redirect(url_for('importer.detail'))
 
-    except Exception as e:
-      flash(f"Error importing from {site}, : {e}")
-      return redirect(url_for(importer.detail))
+    #except Exception as e:
+    #flash(f"Error importing from {site}, : {e}")
+    return redirect(url_for('importer.detail'))
 
     added = 0
     for game in new_games:
