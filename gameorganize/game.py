@@ -15,14 +15,21 @@ def detail(id):
     return redirect(url_for('gamelist.detail'))
 
   if request.method == 'POST':
-    game.name = request.form.get("name")
-    game.platform_id = request.form.get("platform")
-    game.completion = request.form.get("completion")
-    game.priority = request.form.get("priority")
-    game.cheev = request.form.get("cheev")
-    game.cheev_total = request.form.get("cheev_total")
-    game.notes = request.form.get("notes")
-    db.session.commit()
+    try:
+      if(not request.form.get("name")):
+        raise ValueError("Empty game name")
+      game.name = request.form.get("name")
+      game.platform_id = request.form.get("platform")
+      game.completion = request.form.get("completion")
+      game.priority = request.form.get("priority")
+      game.cheev = request.form.get("cheev")
+      game.cheev_total = request.form.get("cheev_total")
+      game.notes = request.form.get("notes")
+      db.session.commit()
+    except Exception as e:
+      flash(f"DB Error: {e}")
+      return redirect(url_for('game.add'))
+
     flash(f"Updated: Game {game.name}")
     return redirect(url_for('game.detail', id=id))
 
@@ -39,16 +46,18 @@ def detail(id):
 @game.route("/add", methods=['GET', 'POST'])
 def add():
   if request.method == 'POST':
-    new_game = GameEntry(
-      name = request.form.get("name"),
-      platform_id = request.form.get("platform"),
-      completion = request.form.get("completion"),
-      priority = request.form.get("priority"),
-      cheev = request.form.get("cheev"),
-      cheev_total = request.form.get("cheev_total"),
-      notes = request.form.get("notes"),
-    )
     try:
+      if(not request.form.get("name")):
+        raise ValueError("Empty game name")
+      new_game = GameEntry(
+        name = request.form.get("name"),
+        platform_id = request.form.get("platform"),
+        completion = request.form.get("completion"),
+        priority = request.form.get("priority"),
+        cheev = request.form.get("cheev"),
+        cheev_total = request.form.get("cheev_total"),
+        notes = request.form.get("notes"),
+      )
       db.session.add(new_game)
       db.session.commit()
     except Exception as e:

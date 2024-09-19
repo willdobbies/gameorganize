@@ -43,7 +43,7 @@ class Priority(enum.Enum):
 
 class GameEntry(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(unique=True)
+    name: Mapped[str] = mapped_column(unique=True, nullable=False)
     #platform: Mapped[str] = mapped_column()
     platform_id: Mapped[int] = mapped_column(ForeignKey("platform.id"), nullable=True) 
     platform = relationship(Platform, foreign_keys=[platform_id])
