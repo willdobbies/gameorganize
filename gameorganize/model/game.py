@@ -2,7 +2,6 @@ from gameorganize.db import db
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 import enum
-from gameorganize.model.platform import Platform
 
 class Completion(enum.Enum):
     Null = -1
@@ -45,8 +44,8 @@ class GameEntry(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(unique=True, nullable=False)
     #platform: Mapped[str] = mapped_column()
-    platform_id: Mapped[int] = mapped_column(ForeignKey("platform.id"), nullable=True) 
-    platform = relationship(Platform, foreign_keys=[platform_id])
+    platform_id: Mapped[int] = mapped_column(ForeignKey("platform.id", ondelete='SET NULL'), nullable=True) 
+    #platform = relationship("Platform", foreign_keys=[platform_id])
     completion: Mapped[Completion] = mapped_column(default=Completion.Unplayed)
     ownership: Mapped[Ownership] = mapped_column(default=Ownership.Physical)
     priority: Mapped[Priority] = mapped_column(default=Priority.Normal)
