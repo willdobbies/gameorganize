@@ -17,7 +17,11 @@
         <label for="completion">Completion</label>
         <select class="form-control" name="completion">
             {% for type in Completion %}
-                <option>{{ type.name }}</option>
+                {% if type == Completion.Unplayed %}
+                    <option selected>{{ type.name }}</option>
+                {% else %}
+                    <option>{{ type.name }}</option>
+                {% endif %}
             {% endfor %}
         </select>
     </div>
@@ -25,7 +29,11 @@
         <label for="priority">Priority</label>
         <select class="form-control" name="priority">
             {% for type in Priority %}
-                <option>{{ type.name }}</option>
+                {% if type == Priority.Normal %}
+                    <option selected>{{ type.name }}</option>
+                {% else %}
+                    <option>{{ type.name }}</option>
+                {% endif %}
             {% endfor %}
         </select>
     </div>
