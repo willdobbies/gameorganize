@@ -58,8 +58,7 @@
         </td>
         <td>
             {% if game.notes %}
-                <button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#notesModal">View</button>
-                <!--input type="button" class="btn btn-secondary" id="notesButton" data-name="{{game.name}}" data-toggle="modal" data-target="#notesModal" value="View"/-->
+                <button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#notesModal" data-name="{{game.name}}" data-notes="{{game.notes}}">View</button>
             {% endif %}
         </td>
     </tr>
@@ -68,14 +67,14 @@
 </table>
 </form>
 
-<div class="modal" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="notesModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Notes</h5>
       </div>
       <div class="modal-body">
-        <div id="modalNotes"></div>
+        <div id="modal-text">Da notes</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -120,23 +119,13 @@
         }
     }); 
 
-    $(document).on('show.bs.modal','#notesModal', function () {
-        alert('hi');
-    })
-
-    $(document).ready(
-        console.log($("#notesModal"))
-    )
-
-    $("#notesModal").on('show.bs.modal', function (event) {
-        alert('hi')
-        /*var button = $(event.relatedTarget) // Button that triggered the modal
-        var name = button.data('name')
-        alert(name)
-        //var notes = button.data('notes')
+    $('#notesModal').on('focus', function (event) {
+        var button = $(event.relatedTarget)
+        var name = button.data('name') 
+        var notes = button.data('notes') 
         var modal = $(this)
-        modal.find('.modal-title').text(name + ' Notes')
-        //modal.find('.modalNotes').val(notes)*/
-    });
+        modal.find('.modal-title').text('Notes for ' + name)
+        modal.find('.modal-body').text(notes)
+    })
   </script>
 {% endblock %}
