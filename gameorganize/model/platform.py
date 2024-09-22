@@ -5,8 +5,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 class Platform(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(unique=True, nullable=False)
-    #children = relationship("GameEntry", back_populates="platform")
-    game_entries = relationship('GameEntry', backref='platform')
+    #children = relationship("GameEntry", back_populates="platform", cascade="all,delete")
+    children = relationship('GameEntry', backref='platform', cascade="all,delete")
 
 def add_or_find_platform(name:str):
     exist_platform = db.session.query(Platform).where(Platform.name==name).first()
