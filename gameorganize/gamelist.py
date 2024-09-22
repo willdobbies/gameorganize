@@ -71,24 +71,31 @@ def detail():
 
   args = request.args
   filters = []
+  filter_parse = {}
 
+  # Convert values back to objects
+  filter_parse["platform_id"] = args.getlist("platform_id")
+  for idx, val in enumerate(filter_parse["platform_id"]):
+    filter_parse["platform_id"][idx] = int(val)
+  print(filter_parse["platform_id"])
+
+  filter_parse["priority"] = args.getlist("priority")
+  for idx, val in enumerate(filter_parse["priority"]):
+    filter_parse["priority"][idx] = Priority(int(val))
+
+  filter_parse["completion"] = args.getlist("completion")
+  for idx, val in enumerate(filter_parse["completion"]):
+    filter_parse["completion"][idx] = Completion(int(val))
+
+  # Apply filters to GameEntry query
   if("platform_id" in args):
-    f_platform_id = args.getlist("platform_id")
-    filters.append(GameEntry.platform_id.in_(f_platform_id))
+    filters.append(GameEntry.platform_id.in_(filter_parse["platform_id"]))
 
   if("priority" in args):
-    f_priority = args.getlist("priority")
-    for idx, val in enumerate(f_priority):
-      f_priority[idx] = Priority(int(f_priority[idx]))
-    print(f_priority)
-    filters.append(GameEntry.priority.in_(f_priority))
+    filters.append(GameEntry.priority.in_(filter_parse["priority"]))
 
   if("completion" in args):
-    f_completion = args.getlist("completion")
-    for idx, val in enumerate(f_completion):
-      f_completion[idx] = Completion(int(f_completion[idx]))
-    print(f_completion)
-    filters.append(GameEntry.completion.in_(f_completion))
+    filters.append(GameEntry.completion.in_(filter_parse["completion"]))
   
   all_platforms=db.session.query(Platform)
   all_games=db.session.query(GameEntry).filter(*filters)
@@ -97,9 +104,10 @@ def detail():
 
   return render_template(
     'gamelist/detail.html',
+    Completion=Completion,
+    Priority=Priority,
     all_games=all_games,
     all_platforms=all_platforms,
+    filter=filter_parse,
     stats=stats,
-    Completion=Completion,
-    Priority=Priority
   )

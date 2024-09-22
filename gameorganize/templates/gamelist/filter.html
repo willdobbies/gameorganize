@@ -1,38 +1,41 @@
 <button data-toggle="collapse" data-target="#filter" class="btn btn-secondary">Filter</button>
 <div id="filter" class="collapse">
-    <form action="" method="post">
-        <div class="form-group">
-            <label for="name">Completion: </label>
-            {% for completion in Completion %}
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label badge bg-{{completion.get_color()}}" for="completion">{{completion.name}}</label>
-                    <input class="form-check-input" type="checkbox" id="completion" name="completion" value="{{completion.value}}">
-                </div>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            <label for="name">Priority: </label>
-            {% for type in Priority %}
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label" for="priority">{{type.name}}</label>
-                    <input class="form-check-input" type="checkbox" id="priority" name="priority" value="{{type.value}}">
-                </div>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            <label for="name">Platform: </label>
-            {% for platform in all_platforms %}
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label" for="platform_id">{{platform.name}}</label>
-                    <input class="form-check-input" type="checkbox" id="priority" name="platform_id" value="{{platform.id}}">
-                </div>
-            {% endfor %}
-            </select>
-        </div>
+<form action="" method="post">
+    <div class="form-group">
+        <label for="name">Completion: </label>
+        {% for completion in Completion %}
+            {% set checked = "checked" if (completion in filter["completion"]) else "" %}
+            <div class="form-check form-check-inline">
+                <label class="form-check-label badge bg-{{completion.get_color()}}" for="completion">{{completion.name}}</label>
+                <input {{checked}} class="form-check-input" type="checkbox" id="completion" name="completion" value="{{completion.value}}">
+            </div>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <label for="name">Priority: </label>
+        {% for type in Priority %}
+            {% set checked = "checked" if (type in filter["priority"]) else "" %}
+            <div class="form-check form-check-inline">
+                <label class="form-check-label" for="priority">{{type.name}}</label>
+                <input {{checked}} class="form-check-input" type="checkbox" id="priority" name="priority" value="{{type.value}}">
+            </div>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <label for="name">Platform: </label>
+        {% for platform in all_platforms %}
+            {% set checked = "checked" if (platform.id in filter["platform_id"]) else "" %}
+            <div class="form-check form-check-inline">
+                <label class="form-check-label" for="platform_id">{{platform.name}}</label>
+                <input {{checked}} class="form-check-input" type="checkbox" id="priority" name="platform_id" value="{{platform.id}}">
+            </div>
+        {% endfor %}
+        </select>
+    </div>
 
-        <div class="form-group">
-            <button type="submit" class="btn btn-success">Apply</button>
-            <a href="{{ url_for('gamelist.detail') }}" class="btn btn-danger">Reset</a>
-        </div>
-    </form>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Apply</button>
+        <a href="{{ url_for('gamelist.detail') }}" class="btn btn-danger">Reset</a>
+    </div>
+</form>
 </div>
