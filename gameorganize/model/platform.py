@@ -5,7 +5,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 class Platform(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(unique=True, nullable=False)
-    #children = relationship("GameEntry", back_populates="platform", cascade="all,delete")
     children = relationship('GameEntry', backref='platform', cascade="all,delete")
 
 def add_or_find_platform(name:str):
@@ -20,7 +19,7 @@ def add_or_find_platform(name:str):
 
     return new_platform
 
-#@event.listens_for(Platform.__table__, 'after_create')
+@event.listens_for(Platform.__table__, 'after_create')
 def platform_after_create(target, connection, **kw):
     print("Prefilling Platform values")
     default_names = [
