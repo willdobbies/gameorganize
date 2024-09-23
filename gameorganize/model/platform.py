@@ -5,7 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 class Platform(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(unique=True, nullable=False)
-    children = relationship('GameEntry', backref='platform', cascade="all,delete")
+    children = relationship('GameEntry', backref='platform')
 
 def find_platform(name:str):
     return db.session.query(Platform).where(Platform.name==name).first()
