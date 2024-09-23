@@ -1,5 +1,5 @@
 from gameorganize.model.game import GameEntry, Completion
-from gameorganize.model.platform import add_or_find_platform
+from gameorganize.model.platform import Platform, find_platform
 import requests
 
 class ImporterRA():
@@ -25,7 +25,7 @@ class ImporterRA():
         return r.json()
 
     def parse(self, res : dict):
-        all_games = []
+        all_db_elements = []
 
         for entry in res.get("Results", []):
             completion = Completion.Started
@@ -36,14 +36,20 @@ class ImporterRA():
                 if("mastered" in completion_award):
                     completion = Completion.Completed
 
+            platform_name = entry.get("ConsoleName")
+            platform = find_platform(platform_name)
+            if(not platform):
+                platform = Platform(name=platform_name)
+                all_db_elements.append(platform)
+
             new_game = GameEntry(
                 name = entry.get("Title"),
-                platform_id = add_or_find_platform(entry.get("ConsoleName")).id,
+                platform = platform,
                 completion = completion,
                 cheev = entry.get("NumAwarded", 0),
                 cheev_total = entry.get("MaxPossible", 0)
             )
 
-            all_games.append(new_game)
+            all_db_elements.append(new_game)
         
-        return all_games
+        return all_db_elements

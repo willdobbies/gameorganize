@@ -3,6 +3,7 @@ from gameorganize.model.game import Completion
 from pathlib import Path
 import json
 import pytest
+from flask_setup import test_app, client, runner
 
 basedir = Path(__file__).parent
 
@@ -26,7 +27,7 @@ def test_fetch_stats(apiId, apiKey):
 
     #print(stats)
 
-def test_completion():
+def test_completion(client):
     importer = ImporterSteam(None, None)
 
     completion_null = importer.get_completion(0, {})
@@ -54,7 +55,7 @@ def test_completion():
 
         assert completion[0] == Completion.Completed
 
-def test_parse():
+def test_parse(client):
     importer = ImporterSteam(None, None)
 
     with open(basedir / "data/steam.json", "r") as buf:

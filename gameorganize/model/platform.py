@@ -7,17 +7,8 @@ class Platform(db.Model):
     name: Mapped[str] = mapped_column(unique=True, nullable=False)
     children = relationship('GameEntry', backref='platform', cascade="all,delete")
 
-def add_or_find_platform(name:str):
-    exist_platform = db.session.query(Platform).where(Platform.name==name).first()
-
-    if(exist_platform):
-        return exist_platform
-
-    new_platform = Platform(name = name)
-    db.session.add(new_platform)
-    db.session.commit()
-
-    return new_platform
+def find_platform(name:str):
+    return db.session.query(Platform).where(Platform.name==name).first()
 
 @event.listens_for(Platform.__table__, 'after_create')
 def platform_after_create(target, connection, **kw):

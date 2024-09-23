@@ -2,7 +2,7 @@ from .db import db
 from .importers.retroachievements import ImporterRA
 from .importers.steam import ImporterSteam
 from .model.game import GameEntry, Completion, Priority
-from .model.platform import Platform, add_or_find_platform
+from .model.platform import Platform, find_platform
 from flask import Blueprint, render_template, request, url_for, redirect, flash
 import csv
 
@@ -48,11 +48,15 @@ def import_csv(data):
   new_games = []
 
   for line in csv_reader:
-    new_platform = add_or_find_platform(line.get("Platform")) 
+    platform_name = line.get("Platform")
+    platform = find_platform(platform_name)
+    if(not platform):
+        platform = Platform(name=platform_name)
+        all_db_elements.append(platform)
 
     new_game = GameEntry(
       name = line.get("Name"),
-      platform_id = new_platform.id,
+      platform = platform,
     )
 
     if("Completion" in line):

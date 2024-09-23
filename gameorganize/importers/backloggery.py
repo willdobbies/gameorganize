@@ -1,5 +1,5 @@
 from gameorganize.model.game import GameEntry, Completion
-from gameorganize.model.platform import add_or_find_platform
+from gameorganize.model.platform import Platform, find_platform
 import csv 
 
 # Library columns:
@@ -27,18 +27,24 @@ class ImporterBackloggery():
         return jsonArray
 
     def parse(self, data):
-        new_games = []
+        all_db_elements = []
 
         for entry in data:
             completion_name = entry.get("Status", "")
             if(not completion_name): 
                 completion_name = "Unplayed"
 
-            new_games.append(GameEntry(
+            platform_name = entry.get("ConsoleName")
+            platform = find_platform(platform_name)
+            if(not platform):
+                platform = Platform(name=platform_name)
+                all_db_elements.append(platform)
+
+            all_db_elements.append(GameEntry(
                 name = entry.get("Title"),
-                platform_id = add_or_find_platform(entry.get("Platform")).id,
+                platform = platform,
                 completion = Completion[completion_name],
                 notes = entry.get("Notes", ""),
             ))
 
-        return new_games
+        return all_db_elements

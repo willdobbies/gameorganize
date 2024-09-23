@@ -1,5 +1,5 @@
 from gameorganize.model.game import GameEntry, Completion, Ownership
-from gameorganize.model.platform import add_or_find_platform
+from gameorganize.model.platform import Platform, find_platform
 import requests
 
 class ImporterSteam():
@@ -74,7 +74,14 @@ class ImporterSteam():
         return [completion, cheev, cheev_got]
     
     def parse(self, res:dict):
-        all_games = []
+        all_db_elements = []
+
+        platform_name = "Steam"
+        platform = find_platform(platform_name)
+        if(not platform):
+            platform = Platform(name=platform_name)
+            all_db_elements.append(platform)
+
         for entry in res:
             completion,cheev,cheev_got = self.get_completion(
                 entry.get("playtime_forever",0),
@@ -83,13 +90,13 @@ class ImporterSteam():
 
             new_game = GameEntry(
                 name = entry.get("name"),
-                platform = add_or_find_platform("Steam"),
+                platform = platform,
                 completion = completion,
                 ownership = Ownership.Digital,
                 cheev = len(cheev_got),
                 cheev_total = len(cheev)
             )
 
-            all_games.append(new_game)
+            all_db_elements.append(new_game)
 
-        return all_games
+        return all_db_elements
