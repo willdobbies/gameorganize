@@ -5,7 +5,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 def get_db_path(name):
     #return "sqlite:///" + os.path.join(basedir, f'{name}.db')
-    return f"sqlite:///{name}.sqlite3"
+    return f"sqlite:///{name}"
 
 # Default settings
 class Config:
@@ -17,14 +17,14 @@ class Config:
 class DevelopmentConfig(Config):
     SQLALCHEMY_ECHO = False
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = get_db_path("dev")
+    SQLALCHEMY_DATABASE_URI = get_db_path("dev.sqlite3")
 
 class TestingConfig(Config):
     TESTING = True
     WTF_CSRF_ENABLED = False
     MAIL_SUPPRESS_SEND = True
-    SQLALCHEMY_DATABASE_URI = get_db_path("test")
+    SQLALCHEMY_DATABASE_URI = get_db_path("")
 
 class ProductionConfig(Config):
     FLASK_ENV = 'production'
-    SQLALCHEMY_DATABASE_URI = get_db_path("production")
+    SQLALCHEMY_DATABASE_URI = get_db_path("production.sqlite3")

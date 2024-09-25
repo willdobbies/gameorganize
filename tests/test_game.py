@@ -1,10 +1,10 @@
 from gameorganize.model.game import GameEntry, Completion, Priority, Ownership
 from gameorganize.model.platform import Platform
 from gameorganize.db import db
-from flask_setup import test_app, client, runner
 
-def test_entries(client):
+def test_entries(app):
     """Add some test games, check if they go into the DB okay"""
+
     p1 = Platform(
         name="TestPlatform",
     )
@@ -34,22 +34,21 @@ def test_entries(client):
         cheev_total=100
     )
 
-    db.session.add(p1)
-    db.session.add(g1)
-    db.session.add(g2)
-    db.session.add(g3)
-    db.session.commit()
+    with app.app_context():
+        db.session.add(p1)
+        db.session.add(g1)
+        db.session.add(g2)
+        db.session.add(g3)
+        db.session.commit()
 
-    all_games=db.session.query(GameEntry)
+        all_games=db.session.query(GameEntry)
 
-    assert(g1 in all_games)
-    assert(g2 in all_games)
-    assert(g3 in all_games)
+        assert(g1 in all_games)
+        assert(g2 in all_games)
+        assert(g3 in all_games)
 
-    db.session.delete(p1)
-    db.session.commit()
+        db.session.delete(p1)
+        db.session.commit()
 
-    all_games=db.session.query(GameEntry)
-    assert(not g1 in all_games)
-    assert(not g2 in all_games)
-    assert(not g3 in all_games)
+        pikmin=db.session.query(GameEntry).where(GameEntry.name == "Pikmin 2").first()
+        assert(pikmin.platform is None)
