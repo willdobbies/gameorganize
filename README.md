@@ -1,5 +1,6 @@
 # Overview
 A simple, self-hosted game progress tracker. Heavily inspired by [Backloggery](https://backloggery.com/).
+Warning: App is in early development and is unstable... Expect breaking changes.
 
 # Features
 - Catalog your game collection spanning across various platforms and formats
