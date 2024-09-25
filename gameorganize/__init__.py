@@ -1,19 +1,17 @@
 from flask import Flask
 from .db import db
-from flask_migrate import Migrate
+from .config import DevelopmentConfig
 
-def create_app():
-    from .config import DevelopmentConfig
-
+def create_app(config = DevelopmentConfig):
     app = Flask(__name__)
-    app.config.from_object(DevelopmentConfig)
-
-    migrate = Migrate(app, db)
+    app.config.from_object(config)
 
     register_blueprints(app)
     init_extensions(app)
 
-    return app
+    with app.app_context():
+        db.create_all()
+        return app
 
 def register_blueprints(app):
     from .game import game
@@ -27,5 +25,4 @@ def register_blueprints(app):
     app.register_blueprint(platform, url_prefix='/platform')
 
 def init_extensions(app):
-    from .db import db
     db.init_app(app)
