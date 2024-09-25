@@ -77,7 +77,6 @@ def detail():
   filter_parse["platform_id"] = args.getlist("platform_id")
   for idx, val in enumerate(filter_parse["platform_id"]):
     filter_parse["platform_id"][idx] = int(val)
-  print(filter_parse["platform_id"])
 
   filter_parse["priority"] = args.getlist("priority")
   for idx, val in enumerate(filter_parse["priority"]):
