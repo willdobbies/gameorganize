@@ -3,7 +3,7 @@
 <form action="" method="post">
     <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" class="form-control" name="name" value="{{ game.name }}">
+        <input type="text" class="form-control" name="name" value="{{ game.name }}" required>
     </div>
     <div class="form-group">
         <label for="platform">Platform</label>
@@ -43,8 +43,8 @@
     </div>
     <div class="form-group">
         <label for="achievements">Achievements</label>
-        <input type="number" name="cheev" class="form-control mb-2" value="{{game.cheev}}">
-        <input type="number" name="cheev_total" class="form-control mb-2" value="{{game.cheev_total}}">
+        <input type="number" name="cheev" class="form-control mb-2" value="{{game.cheev}}" required>
+        <input type="number" name="cheev_total" class="form-control mb-2" value="{{game.cheev_total}}" required>
     </div>
     <div class="form-group">
         <label for="notes">Notes</label>

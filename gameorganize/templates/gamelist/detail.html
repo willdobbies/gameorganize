@@ -44,7 +44,7 @@
             </div>
         </td>
         <td>
-            {% if game.cheev > 0 %}
+            {% if game.cheev > 0 or game.cheev_total > 0 %}
                 <div>
                     <progress id="cheev_prog" max="{{ game.cheev_total }}" value="{{ game.cheev }}"></progress>
                     {{ game.cheev }} / {{ game.cheev_total }}
