@@ -7,10 +7,11 @@ game = Blueprint('game', __name__, template_folder='templates')
 
 @game.route("/<id>", methods=['GET', 'POST'])
 def detail(id):
-  game = db.session.get(GameEntry, id)
+  _game = db.session.get(GameEntry, id)
   #game = db.one_or_404(db.select(GameEntry).filter_by(id=id))
+  print(_game)
 
-  if(not game):
+  if(not _game):
     flash(f"Error: Game ID {id} not found")
     return redirect(url_for('gamelist.detail'))
 
@@ -18,26 +19,26 @@ def detail(id):
     try:
       if(not request.form.get("name")):
         raise ValueError("Empty game name")
-      game.name = request.form.get("name")
-      game.platform_id = request.form.get("platform")
-      game.completion = request.form.get("completion")
-      game.priority = request.form.get("priority")
-      game.cheev = request.form.get("cheev")
-      game.cheev_total = request.form.get("cheev_total")
-      game.notes = request.form.get("notes")
+      _game.name = request.form.get("name")
+      _game.platform_id = request.form.get("platform")
+      _game.completion = request.form.get("completion")
+      _game.priority = request.form.get("priority")
+      _game.cheev = request.form.get("cheev")
+      _game.cheev_total = request.form.get("cheev_total")
+      _game.notes = request.form.get("notes")
       db.session.commit()
     except Exception as e:
       flash(f"DB Error: {e}")
-      return redirect(url_for('game.add'))
+      return redirect(url_for('game.detail', id=id))
 
-    flash(f"Updated: Game {game.name}")
+    flash(f"Updated: Game {_game.name}")
     return redirect(url_for('game.detail', id=id))
 
   all_platforms=db.session.query(Platform)
 
   return render_template(
     'game/detail.html',
-    game=game,
+    game=_game,
     all_platforms=all_platforms,
     Completion=Completion,
     Priority=Priority
@@ -78,14 +79,14 @@ def add():
 
 @game.route("/<id>/delete", methods=['GET', 'POST'])
 def delete(id):
-  game = db.session.get(GameEntry, id)
+  _game = db.session.get(GameEntry, id)
 
-  if(not game):
+  if(not _game):
     flash(f"Error: Game ID {id} not found")
     return redirect(url_for('gamelist.detail'))
   
-  db.session.delete(game)
+  db.session.delete(_game)
   db.session.commit()
 
-  flash(f"Deleted game {game.name}")
+  flash(f"Deleted game {_game.name}")
   return redirect(url_for('gamelist.detail'))
