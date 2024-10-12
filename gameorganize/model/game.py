@@ -51,5 +51,18 @@ class GameEntry(db.Model):
     cheev_total: Mapped[int] = mapped_column(default=0)
     notes:Mapped[str] = mapped_column(default="")
 
+    def get_cheev_perc(self):
+        return self.cheev / self.cheev_total
+    
+    def get_cheev_icon(self):
+        perc = self.get_cheev_perc()
+        if(perc <= 0.5):
+            return "🥉"
+        if(perc < 1.0):
+            return "🥈"
+        if(perc == 1.0):
+            return "🥇"
+        return ""
+
     def __repr__(self):
         return f'<Game {self.name} @ {self.platform} [{self.completion.name}]>'

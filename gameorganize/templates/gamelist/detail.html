@@ -48,7 +48,7 @@
                 <div>
                     <progress id="cheev_prog" max="{{ game.cheev_total }}" value="{{ game.cheev }}"></progress>
                     {{ game.cheev }} / {{ game.cheev_total }}
-                    🏆
+                    {{ game.get_cheev_icon () }}
                 </div>
             {% else %}
             {% endif %}
