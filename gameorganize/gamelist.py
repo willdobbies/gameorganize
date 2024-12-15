@@ -2,7 +2,7 @@ from .db import db
 from .model.game import GameEntry, Completion, Priority
 from .model.platform import Platform
 from flask import Blueprint, render_template, request, url_for, redirect, flash
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 gamelist = Blueprint('gamelist', __name__, template_folder='templates')
 
@@ -98,6 +98,8 @@ def detail():
 
   if("completion" in args):
     filters.append(GameEntry.completion.in_(filter_parse["completion"]))
+
+  filters.append(GameEntry.user_id.is_(current_user.id))
   
   all_platforms=db.session.query(Platform)
   all_games=db.session.query(GameEntry).filter(*filters)

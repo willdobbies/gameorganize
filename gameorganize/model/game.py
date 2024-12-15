@@ -1,5 +1,5 @@
 from gameorganize.db import db
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 import enum
 
@@ -42,14 +42,18 @@ class Priority(enum.Enum):
 
 class GameEntry(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(unique=True, nullable=False)
+    name: Mapped[str] = mapped_column(nullable=False)
     platform_id: Mapped[int] = mapped_column(ForeignKey("platform.id", ondelete='SET NULL'), nullable=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     completion: Mapped[Completion] = mapped_column(default=Completion.Unplayed)
     ownership: Mapped[Ownership] = mapped_column(default=Ownership.Physical)
     priority: Mapped[Priority] = mapped_column(default=Priority.Normal)
     cheev: Mapped[int] = mapped_column(default=0)
     cheev_total: Mapped[int] = mapped_column(default=0)
     notes:Mapped[str] = mapped_column(default="")
+    __table_args__ = (
+        UniqueConstraint('name', 'user_id', name='game_name_unique_constraint'),
+    )
 
     def get_cheev_perc(self):
         return self.cheev / self.cheev_total

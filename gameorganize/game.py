@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, request, url_for, redirect, flash
-from flask_login import login_required, current_user
+from .db import db
 from .model.game import GameEntry, Completion, Priority
 from .model.platform import Platform
-from .db import db
+from flask import Blueprint, render_template, request, url_for, redirect, flash
+from flask_login import login_required, current_user
 
 game = Blueprint('game', __name__, template_folder='templates')
 
@@ -56,6 +56,7 @@ def add():
       new_game = GameEntry(
         name = request.form.get("name"),
         platform_id = request.form.get("platform"),
+        user_id = current_user.id,
         completion = request.form.get("completion"),
         priority = request.form.get("priority"),
         cheev = request.form.get("cheev"),
