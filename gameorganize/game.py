@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
+from flask_login import login_required, current_user
 from .model.game import GameEntry, Completion, Priority
 from .model.platform import Platform
 from .db import db
@@ -6,6 +7,7 @@ from .db import db
 game = Blueprint('game', __name__, template_folder='templates')
 
 @game.route("/<id>", methods=['GET', 'POST'])
+@login_required
 def detail(id):
   _game = db.session.get(GameEntry, id)
   #game = db.one_or_404(db.select(GameEntry).filter_by(id=id))
@@ -45,6 +47,7 @@ def detail(id):
   )
 
 @game.route("/add", methods=['GET', 'POST'])
+@login_required
 def add():
   if request.method == 'POST':
     try:
@@ -78,6 +81,7 @@ def add():
   )
 
 @game.route("/<id>/delete", methods=['GET', 'POST'])
+@login_required
 def delete(id):
   _game = db.session.get(GameEntry, id)
 

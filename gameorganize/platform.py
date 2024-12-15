@@ -1,10 +1,12 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
+from flask_login import login_required
 from .model.platform import Platform
 from .db import db
 
 platform = Blueprint('platform', __name__, template_folder='templates')
 
 @platform.route("/", methods=['GET', 'POST'])
+@login_required
 def detail():
   all_platforms=db.session.query(Platform)
 
@@ -14,6 +16,7 @@ def detail():
   )
 
 @platform.route("/add", methods=['GET', 'POST'])
+@login_required
 def add():
   if request.method == 'POST':
     try:
@@ -36,6 +39,7 @@ def add():
   )
 
 @platform.route("/<id>/delete")
+@login_required
 def delete(id):
   platform = db.session.get(Platform, id)
 

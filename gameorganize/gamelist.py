@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, request, url_for, redirect, flash
+from .db import db
 from .model.game import GameEntry, Completion, Priority
 from .model.platform import Platform
-from .db import db
+from flask import Blueprint, render_template, request, url_for, redirect, flash
+from flask_login import login_required
 
 gamelist = Blueprint('gamelist', __name__, template_folder='templates')
 
@@ -25,6 +26,7 @@ def get_stats(games):
   return stats
 
 @gamelist.route("/edit", methods=['POST'])
+@login_required
 def edit():
   args = request.form.to_dict()
 
@@ -57,6 +59,7 @@ def edit():
   return redirect(request.referrer)
 
 @gamelist.route("/", methods=['GET', 'POST'])
+@login_required
 def detail():
   if request.method == 'POST':
 

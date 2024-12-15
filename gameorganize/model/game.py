@@ -43,7 +43,7 @@ class Priority(enum.Enum):
 class GameEntry(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(unique=True, nullable=False)
-    platform_id: Mapped[int] = mapped_column(ForeignKey("platform.id", ondelete='SET NULL'), nullable=True) 
+    platform_id: Mapped[int] = mapped_column(ForeignKey("platform.id", ondelete='SET NULL'), nullable=True)
     completion: Mapped[Completion] = mapped_column(default=Completion.Unplayed)
     ownership: Mapped[Ownership] = mapped_column(default=Ownership.Physical)
     priority: Mapped[Priority] = mapped_column(default=Priority.Normal)

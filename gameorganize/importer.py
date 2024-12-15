@@ -4,6 +4,7 @@ from .importers.steam import ImporterSteam
 from .model.game import GameEntry, Completion, Priority
 from .model.platform import Platform, find_platform
 from flask import Blueprint, render_template, request, url_for, redirect, flash
+from flask_login import login_required
 import csv
 
 importer = Blueprint('importer', __name__, template_folder='templates')
@@ -84,6 +85,7 @@ def import_csv(data):
   return new_games
 
 @importer.route("/", methods=['GET', 'POST'])
+@login_required
 def detail():
   if request.method == 'POST':
     site = request.form.get("website")
