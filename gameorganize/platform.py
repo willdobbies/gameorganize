@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
-from flask_login import login_required
+from flask_login import login_required, current_user
 from .model.platform import Platform
 from .db import db
 
@@ -8,7 +8,7 @@ platform = Blueprint('platform', __name__, template_folder='templates')
 @platform.route("/", methods=['GET', 'POST'])
 @login_required
 def detail():
-  all_platforms=db.session.query(Platform)
+  all_platforms=db.session.query(Platform).filter_by(user_id=current_user.id)
 
   return render_template(
     'platform/detail.html',
@@ -24,6 +24,7 @@ def add():
         raise ValueError("Empty platform name")
       new_platform = Platform(
         name = request.form.get("name"),
+        user_id = current_user.id,
       )
       db.session.add(new_platform)
       db.session.commit()
@@ -41,7 +42,7 @@ def add():
 @platform.route("/<id>/delete")
 @login_required
 def delete(id):
-  platform = db.session.get(Platform, id)
+  platform = db.session.query(Platform).where(Platform.id==id, Platform.user_id==current_user.id).first()
 
   if(not platform):
     flash(f"Error: Platform ID {id} not found")

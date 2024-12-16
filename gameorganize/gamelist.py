@@ -101,7 +101,7 @@ def detail():
 
   filters.append(GameEntry.user_id.is_(current_user.id))
   
-  all_platforms=db.session.query(Platform)
+  all_platforms=db.session.query(Platform).where(Platform.user_id==current_user.id)
   all_games=db.session.query(GameEntry).filter(*filters)
 
   stats = get_stats(all_games)

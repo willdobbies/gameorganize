@@ -36,7 +36,7 @@ def detail(id):
     flash(f"Updated: Game {_game.name}")
     return redirect(url_for('game.detail', id=id))
 
-  all_platforms=db.session.query(Platform)
+  all_platforms=db.session.query(Platform).where(Platform.user_id==current_user.id)
 
   return render_template(
     'game/detail.html',
@@ -72,7 +72,7 @@ def add():
     flash(f"Added new game {new_game.name}")
     return redirect(url_for('gamelist.detail'))
 
-  all_platforms=db.session.query(Platform)
+  all_platforms=db.session.query(Platform).where(Platform.user_id==current_user.id)
 
   return render_template(
     'game/add.html',
