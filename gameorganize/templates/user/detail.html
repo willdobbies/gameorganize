@@ -10,10 +10,14 @@
 
 {%if username == current_user.username%}
 <a href="{{ url_for('game.add')}}" class="btn btn-success">New</a>
-{% include "user/edit.html" %}
+<button data-toggle="collapse" data-target="#edit" class="btn btn-danger">Edit</button>
 {% endif %}
 <a href="{{ url_for('user.platform_list', username=username)}}" class="btn btn-warning">Platforms</a>
+<button data-toggle="collapse" data-target="#filter" class="btn btn-primary">Filter</button>
+{%if username == current_user.username%}
+{% include "user/edit.html" %}
 {% include "user/filter.html" %}
+{% endif %}
 
 <form id="user" action="" method="post">
 <table id="data" class="table table-striped">
