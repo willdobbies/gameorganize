@@ -18,13 +18,13 @@ def register_blueprints(app):
     from .auth import auth
     from .game import game
     from .gamelist import gamelist
-    from .importer import importer
+    #from .importer import importer
     from .platform import platform
 
     app.register_blueprint(auth)
     app.register_blueprint(game, url_prefix='/game')
     app.register_blueprint(gamelist)
-    app.register_blueprint(importer, url_prefix='/import')
+    #app.register_blueprint(importer, url_prefix='/import')
     app.register_blueprint(platform, url_prefix='/platform')
 
 def init_extensions(app):
