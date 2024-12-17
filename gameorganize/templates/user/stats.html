@@ -3,7 +3,7 @@
     <div class="row">
     {% for completion in stats %}
         <div class="col-sm">
-            <a class="plainlink" href="{{url_for('gamelist.detail', username=username, completion=completion.value)}}">{{completion.name}}</a>
+            <a class="plainlink" href="{{url_for('user.detail', username=username, completion=completion.value)}}">{{completion.name}}</a>
             <div class="progress">
                 <div 
                     class="progress-bar bg-{{completion.get_color()}}" 

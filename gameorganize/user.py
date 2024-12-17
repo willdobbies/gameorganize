@@ -5,7 +5,7 @@ from .model.user import User
 from flask import Blueprint, render_template, request, url_for, redirect, flash
 from flask_login import login_required, current_user
 
-gamelist = Blueprint('gamelist', __name__, template_folder='templates')
+user = Blueprint('user', __name__, template_folder='templates')
 
 def get_stats(games):
   stats = {}
@@ -26,7 +26,53 @@ def get_stats(games):
 
   return stats
 
-@gamelist.route("/edit", methods=['POST'])
+@user.route("/<username>/platforms", methods=['GET', 'POST'])
+@login_required
+def platform_list(username):
+  _user = db.session.query(User).where(User.username==username).first()
+  return render_template(
+    'user/platforms.html',
+    username=_user.username,
+    platforms=_user.platforms,
+  )
+
+@user.route("/<username>/platforms/add", methods=['POST'])
+@login_required
+def platform_add(username):
+  try:
+    if(not request.form.get("name")):
+      raise ValueError("Empty platform name")
+    new_platform = Platform(
+      name = request.form.get("name"),
+      user_id = current_user.id,
+    )
+    db.session.add(new_platform)
+    db.session.commit()
+  except Exception as e:
+    flash(f"DB Error: {e}")
+    return redirect(url_for('user.platform_list', username=username))
+
+  flash(f"Added new platform {new_platform.name}")
+  return redirect(url_for('user.platform_list', username=username))
+
+#@platform.route("/<username>/platforms/<id>/delete")
+#@login_required
+#def platform_delete(username, id):
+#  _user = db.session.query(User).where(User.username==username).first()
+#
+#  platform = db.session.query(Platform).where(Platform.id==id, Platform.user_id==current_user.id).first()
+#
+#  if(not platform):
+#    flash(f"Error: Platform ID {id} not found")
+#    return redirect(url_for('platform.detail'))
+#  
+#  db.session.delete(platform)
+#  db.session.commit()
+#
+#  flash(f"Deleted platform {platform.name}")
+#  return redirect(url_for('platform.detail'))gamelist
+
+@user.route("/<username>/edit", methods=['POST'])
 @login_required
 def edit():
   args = request.form.to_dict()
@@ -59,12 +105,9 @@ def edit():
   flash(f"{action} {len(selected)} games")
   return redirect(request.referrer)
 
-@gamelist.route("/<username>", methods=['GET', 'POST'])
+@user.route("/<username>", methods=['GET', 'POST'])
 def detail(username):
   _user = db.session.query(User).where(User.username==username).first()
-
-  if(not _user):
-    return redirect('/')
   
   #return f"{_user.username} has {len(_user.games)} games"
 
@@ -77,7 +120,7 @@ def detail(username):
 
   #  url_params = {k: v for k, v in url_params.items() if v}
 
-  #  return redirect(url_for("gamelist.detail", username=username, **url_params))
+  #  return redirect(url_for("user.detail", username=username, **url_params))
 
   #args = request.args
   #filters = []
@@ -112,7 +155,7 @@ def detail(username):
   games_filtered = _user.games #.filter(*filters)
 
   return render_template(
-    'gamelist/detail.html',
+    'user/detail.html',
     filter={},
     games=games_filtered,
     platforms=_user.platforms,

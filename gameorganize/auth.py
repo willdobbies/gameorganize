@@ -23,7 +23,7 @@ def login_post():
 
     # send to homepage
     login_user(user, remember=remember)
-    return redirect(url_for('gamelist.detail', username=current_user.username))
+    return redirect(url_for('user.detail', username=current_user.username))
 
 @auth.route('/login')
 def login():

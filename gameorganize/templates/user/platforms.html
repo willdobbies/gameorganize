@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if username == current_user.username %}
+<form action="{{ url_for('user.platform_add', username=username)}}" method="post">
+    <div class="form-group row">
+        <div class="col">
+                <input class="form-control" type="text" name="name">
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-success">Add</button>
+        </div>
+    </div>
+</form>
+{% endif %}
+
+<table id="platforms" class="table table-striped">
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Total Games</th>
+    <th>Actions</th>
+    </tr>
+</thead>
+<tbody>
+    <tr class="platform">
+        {% for platform in all_platforms %}
+            <td>
+                <a href="{{ url_for('user.detail', username=username, platform_id=platform.id)}}">{{platform.name}}</a>
+            </td>
+            <td>
+                {{platform.children|length}}
+            </td>
+            <td>
+                {% if username == current_user.username %}
+                <a href="" class="btn btn-danger">Delete</a>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tr>
+</tbody>
+{% endblock %}

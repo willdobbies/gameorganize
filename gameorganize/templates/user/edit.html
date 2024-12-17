@@ -1,6 +1,6 @@
-<button data-toggle="collapse" data-target="#edit" class="btn btn-secondary">Mass Edit</button>
+<button data-toggle="collapse" data-target="#edit" class="btn btn-danger">Edit</button>
 <div id="edit" class="collapse">
-    <form id="editform" action="{{url_for ('gamelist.edit')}}" method="post">
+    <form id="editform" action="{{url_for ('user.edit', username=username)}}" method="post">
         <div class="form-group">
             <label for="name">Completion</label>
             <select class="form-control" name="completion">
@@ -31,7 +31,7 @@
         
         <div class="form-group">
             <label for="name">Mass Actions</label>
-            <button type="submit" formaction="{{ url_for('gamelist.edit', action='delete') }}" class="btn btn-danger">Delete Selected</button>
+            <button type="submit" formaction="{{ url_for('user.edit', username=username, action='delete') }}" class="btn btn-danger">Delete Selected</button>
             </select>
         </div>
 

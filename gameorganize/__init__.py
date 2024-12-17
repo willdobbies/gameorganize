@@ -17,9 +17,8 @@ def create_app(config = DevelopmentConfig):
 def register_blueprints(app):
     from .auth import auth
     from .game import game
-    from .gamelist import gamelist
+    from .user import user
     #from .importer import importer
-    from .platform import platform
 
     @app.route("/", methods=['GET'])
     def home():
@@ -27,9 +26,8 @@ def register_blueprints(app):
 
     app.register_blueprint(auth)
     app.register_blueprint(game, url_prefix='/game')
-    app.register_blueprint(gamelist)
+    app.register_blueprint(user)
     #app.register_blueprint(importer, url_prefix='/import')
-    app.register_blueprint(platform, url_prefix='/platform')
 
 def init_extensions(app):
     db.init_app(app)

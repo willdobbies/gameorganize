@@ -119,7 +119,7 @@ def detail():
       added += (1 if status else 0)
 
     flash(f"Imported {added} games from {site}")
-    return redirect(url_for('gamelist.detail'))
+    return redirect(url_for('user.detail'))
 
   return render_template(
     'importer/detail.html'

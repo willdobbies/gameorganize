@@ -15,7 +15,7 @@ def detail(id):
 
   if(not _game):
     flash(f"Error: Game ID {id} not found")
-    return redirect(url_for('gamelist.detail'))
+    return redirect(url_for('user.detail'))
 
   if request.method == 'POST':
     try:
@@ -39,9 +39,7 @@ def detail(id):
   return render_template(
     'game/detail.html',
     game=_game,
-    all_platforms=get_user_platforms(current_user.id),
-    Completion=Completion,
-    Priority=Priority
+    platforms=current_user.platforms,
   )
 
 @game.route("/add", methods=['GET', 'POST'])
@@ -68,13 +66,11 @@ def add():
       return redirect(url_for('game.add'))
 
     flash(f"Added new game {new_game.name}")
-    return redirect(url_for('gamelist.detail'))
+    return redirect(url_for('user.detail', username=current_user.username))
 
   return render_template(
     'game/add.html',
-    all_platforms==get_user_platforms(current_user.id),
-    Completion=Completion,
-    Priority=Priority
+    platforms=current_user.platforms,
   )
 
 @game.route("/<id>/delete", methods=['GET', 'POST'])
@@ -84,10 +80,10 @@ def delete(id):
 
   if(not _game):
     flash(f"Error: Game ID {id} not found")
-    return redirect(url_for('gamelist.detail'))
+    return redirect(url_for('user.detail'))
   
   db.session.delete(_game)
   db.session.commit()
 
   flash(f"Deleted game {_game.name}")
-  return redirect(url_for('gamelist.detail'))
+  return redirect(url_for('user.detail'))

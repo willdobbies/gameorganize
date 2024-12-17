@@ -1,4 +1,4 @@
-<button data-toggle="collapse" data-target="#filter" class="btn btn-secondary">Filter</button>
+<button data-toggle="collapse" data-target="#filter" class="btn btn-primary">Filter</button>
 <div id="filter" class="collapse">
 <form action="" method="post">
     <div class="form-group">
@@ -29,7 +29,7 @@
 
     <div class="form-group">
         <button type="submit" class="btn btn-success">Apply</button>
-        <a href="{{ url_for('gamelist.detail', username=username) }}" class="btn btn-danger">Reset</a>
+        <a href="{{ url_for('user.detail', username=username) }}" class="btn btn-danger">Reset</a>
     </div>
 </form>
 </div>
