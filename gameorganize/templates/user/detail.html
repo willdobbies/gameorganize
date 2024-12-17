@@ -2,21 +2,26 @@
 
 {% block content %}
 
-<h1>{{username}}'s Games</h1>
+<br>
 
 {% include "user/stats.html" %}
 
 <br>
 
+<div class="d-flex">
+  {%if username == current_user.username%}
+    <a class="p-2 btn btn-success" href="{{ url_for('game.add', username=username)}}">New</a>
+    <button class="p-2 btn btn-danger" data-toggle="collapse" data-target="#edit">Edit</button>
+  {% endif %}
+
+  <a class="p-2 btn btn-warning" href="{{ url_for('user.platform_list', username=username)}}">Platforms</a>
+  <button class="p-2 btn btn-primary" data-toggle="collapse" data-target="#filter">Filter</button>
+</div>
+
 {%if username == current_user.username%}
-<a href="{{ url_for('game.add', username=username)}}" class="btn btn-success">New</a>
-<button data-toggle="collapse" data-target="#edit" class="btn btn-danger">Edit</button>
+  {% include "user/edit.html" %}
 {% endif %}
-<a href="{{ url_for('user.platform_list', username=username)}}" class="btn btn-warning">Platforms</a>
-<button data-toggle="collapse" data-target="#filter" class="btn btn-primary">Filter</button>
-{%if username == current_user.username%}
-{% include "user/edit.html" %}
-{% endif %}
+
 {% include "user/filter.html" %}
 
 <form id="user" action="" method="post">
@@ -39,7 +44,7 @@
             <input form="editform" name="selected" value="{{game.id}}" type="checkbox">
         </td>
         <td>
-            <a href="{{ url_for ('game.detail', username=username, id=game.id) }}">{{ game.name }}</a>
+            <a href="{{ url_for ('game.detail', id=game.id) }}">{{ game.name }}</a>
         </td>
         <td>
             <a class="plainlink" href="{{ url_for('user.detail', username=username, platform_id=game.platform_id) }}">{{ game.platform.name }}</a>

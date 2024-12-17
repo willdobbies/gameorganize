@@ -1,13 +1,14 @@
 {% extends "base.html" %}
+{% set disabled = "disabled" if (current_user.id != game_user.id) else "" %}
 {% block content %}
-<form action="" method="post">
+<form id="details" action="" method="post">
     <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" class="form-control" name="name" value="{{ game.name }}" required>
+        <input type="text" class="form-control" name="name" value="{{ game.name }}" required {{ disabled }}>
     </div>
     <div class="form-group">
         <label for="platform">Platform</label>
-        <select class="form-control" name="platform">
+        <select class="form-control" name="platform" {{ disabled }}>
             {% for platform in platforms %}
                 {% if platform == game.platform %}
                     <option selected value="{{platform.id}}">{{ platform.name }}</option>
@@ -19,7 +20,7 @@
     </div>
     <div class="form-group">
         <label for="completion">Completion</label>
-        <select class="form-control" name="completion">
+        <select class="form-control" name="completion" {{ disabled }}>
             {% for type in Completion %}
                 {% if type == game.completion %}
                     <option selected>{{ type.name }}</option>
@@ -31,7 +32,7 @@
     </div>
     <div class="form-group">
         <label for="priority">Priority</label>
-        <select class="form-control" name="priority">
+        <select class="form-control" name="priority" {{ disabled }}>
             {% for type in Priority %}
                 {% if type == game.priority %}
                     <option selected>{{ type.name }}</option>
@@ -43,20 +44,24 @@
     </div>
     <div class="form-group">
         <label for="achievements">Achievements</label>
-        <input type="number" name="cheev" class="form-control mb-2" value="{{game.cheev}}" required>
-        <input type="number" name="cheev_total" class="form-control mb-2" value="{{game.cheev_total}}" required>
+        <input type="number" name="cheev" class="form-control mb-2" value="{{game.cheev}}" required {{ disabled }}>
+        <input type="number" name="cheev_total" class="form-control mb-2" value="{{game.cheev_total}}" required {{ disabled }}>
     </div>
     <div class="form-group">
         <label for="notes">Notes</label>
-        <textarea name="notes" cols="40" rows="5"class="form-control">{{ game.notes }}</textarea>
-    </div>
-    <div class="form-group">
-        {% if current_user.username == username %}
-        <button type="submit" class="btn btn-success">Save</button>
-        <a href="{{ url_for('game.delete', username=username, id=game.id) }}" class="btn btn-danger">Delete</a>
-        {% endif %}
-        <a href="{{ url_for('user.detail', username=username) }}" class="btn btn-secondary">Back</a>
+        <textarea name="notes" cols="40" rows="5"class="form-control" {{ disabled }}>{{ game.notes }}</textarea>
     </div>
     <input type="hidden" name="id" value="{{ game.id }}" />
 </form>
+<form id="delete" action="{{ url_for('game.delete', id=game.id) }}" method="post">
+    <input type="hidden" name="id" value="{{ game.id }}" />
+</form>
+
+<div>
+    {% if current_user.id == game_user.id %}
+        <button form="details" type="submit" class="btn btn-success">Save</button>
+        <button form="delete" type="submit" class="btn btn-danger">Delete</button>
+    {% endif %}
+    <a href="{{url_for('user.detail', username=game_user.username)}}" class="btn btn-secondary">Back</a>
+</div>
 {% endblock %}

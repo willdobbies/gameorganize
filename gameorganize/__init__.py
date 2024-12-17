@@ -20,6 +20,10 @@ def register_blueprints(app):
     from .user import user
     #from .importer import importer
 
+    @app.errorhandler(404) 
+    def not_found(e): 
+        return render_template("404.html") 
+
     @app.route("/", methods=['GET'])
     def home():
         return render_template("home.html")

@@ -2,7 +2,7 @@ from .db import db
 from .model.game import GameEntry, Completion, Priority
 from .model.platform import Platform, get_user_platforms
 from .model.user import User
-from flask import Blueprint, render_template, request, url_for, redirect, flash
+from flask import Blueprint, render_template, request, url_for, redirect, flash, abort
 from flask_login import login_required, current_user
 
 user = Blueprint('user', __name__, template_folder='templates')
@@ -27,7 +27,6 @@ def get_stats(games):
   return stats
 
 @user.route("/<username>/platforms", methods=['GET', 'POST'])
-@login_required
 def platform_list(username):
   _user = db.session.query(User).where(User.username==username).first()
   return render_template(
@@ -36,9 +35,9 @@ def platform_list(username):
     platforms=_user.platforms,
   )
 
-@user.route("/<username>/platforms/add", methods=['POST'])
+@user.route("/platforms/add", methods=['POST'])
 @login_required
-def platform_add(username):
+def platform_add():
   try:
     if(not request.form.get("name")):
       raise ValueError("Empty platform name")
@@ -50,39 +49,48 @@ def platform_add(username):
     db.session.commit()
   except Exception as e:
     flash(f"DB Error: {e}")
-    return redirect(url_for('user.platform_list', username=username))
+    return redirect(url_for('user.platform_list', username=current_user.username))
 
   flash(f"Added new platform {new_platform.name}")
-  return redirect(url_for('user.platform_list', username=username))
+  return redirect(url_for('user.platform_list', username=current_user.username))
 
-@user.route("/<username>/platforms/<id>/delete", methods=['POST'])
+@user.route("/platforms/<id>/delete", methods=['POST'])
 @login_required
-def platform_delete(username, id):
-  _user = db.session.query(User).where(User.username==username).first()
-  platform = db.session.query(Platform).where(Platform.id==id, Platform.user_id==_user.id).first()
+def platform_delete(id):
+  platform = db.session.get(Platform, id)
 
   if(not platform):
-    flash(f"Error: Platform ID {id} not found")
-    return redirect(url_for('user.platform_list', username=username))
+    abort(404)
+
+  if(platform.user_id != current_user.id):
+    abort(403)
   
   db.session.delete(platform)
   db.session.commit()
 
   flash(f"Deleted platform {platform.name}")
-  return redirect(url_for('user.platform_list', username=username))
+  return redirect(url_for('user.platform_list', username=current_user.username))
 
 @user.route("/<username>/edit", methods=['POST'])
 @login_required
 def edit(username):
-  args = request.form.to_dict()
+  _user = db.session.query(User).where(User.username==username).first()
 
-  # Get all selected IDs
+  if(_user.id != current_user.id):
+    abort(403)
+
+  # Get game selection
+  args = request.form.to_dict()
   selected = [] 
   
   for gameid in request.form.getlist('selected'):
     game = db.session.get(GameEntry, gameid)
     if(not game):
       continue
+
+    if(game.user_id != current_user.id):
+      abort(403)
+
     selected.append(game)
 
   action = request.args.get("action", "modify")
@@ -101,8 +109,8 @@ def edit(username):
 
   db.session.commit()
 
-  flash(f"{action} {len(selected)} games")
-  return redirect(request.referrer)
+  flash(f"Ran {action} on {len(selected)} games")
+  return redirect(url_for("user.detail", username=current_user.username))
 
 def parse_filters(args):
   filters = []
@@ -131,7 +139,6 @@ def parse_filters(args):
   if("completion" in args):
     filters.append(GameEntry.completion.in_(filter_parse["completion"]))
 
-  #filters.append(GameEntry.user_id==id)
   return filters,filter_parse
 
 @user.route("/<username>", methods=['GET', 'POST'])
@@ -139,7 +146,6 @@ def detail(username):
   _user = db.session.query(User).where(User.username==username).first()
   
   if request.method == 'POST':
-
     url_params = request.form.to_dict()
     url_params["priority"] = request.form.getlist("priority")
     url_params["completion"] = request.form.getlist("completion")

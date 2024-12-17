@@ -1,19 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% if username == current_user.username %}
-<form action="{{ url_for('user.platform_add', username=username)}}" method="post">
-    <div class="form-group row">
-        <div class="col">
-                <input class="form-control" type="text" name="name">
-        </div>
-        <div class="col">
-            <button type="submit" class="btn btn-success">Add</button>
-        </div>
-    </div>
-</form>
-{% endif %}
-
 <table id="platforms" class="table table-striped">
 <thead>
     <tr>
@@ -41,4 +28,19 @@
         {% endfor %}
     </tr>
 </tbody>
+</table>
+
+{% if username == current_user.username %}
+<form action="{{ url_for('user.platform_add', username=username)}}" method="post">
+    <div class="form-group row">
+        <div class="col-lg-10">
+                <input class="form-control" type="text" name="name">
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-success">Add</button>
+        </div>
+    </div>
+</form>
+{% endif %}
+
 {% endblock %}
