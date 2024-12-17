@@ -1,6 +1,6 @@
 from .db import db
 from .model.game import GameEntry, Completion, Priority
-from .model.platform import Platform
+from .model.platform import Platform, get_user_platforms
 from flask import Blueprint, render_template, request, url_for, redirect, flash
 from flask_login import login_required, current_user
 
@@ -101,7 +101,6 @@ def detail():
 
   filters.append(GameEntry.user_id.is_(current_user.id))
   
-  all_platforms=db.session.query(Platform).where(Platform.user_id==current_user.id)
   all_games=db.session.query(GameEntry).filter(*filters)
 
   stats = get_stats(all_games)
@@ -111,7 +110,7 @@ def detail():
     Completion=Completion,
     Priority=Priority,
     all_games=all_games,
-    all_platforms=all_platforms,
+    all_platforms=get_user_platforms(current_user.id),
     filter=filter_parse,
     stats=stats,
   )

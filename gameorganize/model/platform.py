@@ -12,6 +12,9 @@ class Platform(db.Model):
         UniqueConstraint('name', 'user_id', name='platform_unique_constraint'),
     )
 
+def get_user_platforms(user_id:int):
+    return db.session.query(Platform).where(Platform.user_id==user_id).order_by(Platform.name)
+
 def find_platform(name:str):
     return db.session.query(Platform).where(Platform.name==name).first()
 

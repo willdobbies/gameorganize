@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
 from flask_login import login_required, current_user
-from .model.platform import Platform
+from .model.platform import Platform, get_user_platforms
 from .db import db
 
 platform = Blueprint('platform', __name__, template_folder='templates')
@@ -8,11 +8,9 @@ platform = Blueprint('platform', __name__, template_folder='templates')
 @platform.route("/", methods=['GET', 'POST'])
 @login_required
 def detail():
-  all_platforms=db.session.query(Platform).filter_by(user_id=current_user.id)
-
   return render_template(
     'platform/detail.html',
-    all_platforms=all_platforms,
+    all_platforms=get_user_platforms(current_user.id),
   )
 
 @platform.route("/add", methods=['GET', 'POST'])

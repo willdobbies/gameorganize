@@ -1,6 +1,6 @@
 from .db import db
 from .model.game import GameEntry, Completion, Priority
-from .model.platform import Platform
+from .model.platform import Platform, get_user_platforms
 from flask import Blueprint, render_template, request, url_for, redirect, flash
 from flask_login import login_required, current_user
 
@@ -36,12 +36,10 @@ def detail(id):
     flash(f"Updated: Game {_game.name}")
     return redirect(url_for('game.detail', id=id))
 
-  all_platforms=db.session.query(Platform).where(Platform.user_id==current_user.id)
-
   return render_template(
     'game/detail.html',
     game=_game,
-    all_platforms=all_platforms,
+    all_platforms=get_user_platforms(current_user.id),
     Completion=Completion,
     Priority=Priority
   )
@@ -72,11 +70,9 @@ def add():
     flash(f"Added new game {new_game.name}")
     return redirect(url_for('gamelist.detail'))
 
-  all_platforms=db.session.query(Platform).where(Platform.user_id==current_user.id)
-
   return render_template(
     'game/add.html',
-    all_platforms=all_platforms,
+    all_platforms==get_user_platforms(current_user.id),
     Completion=Completion,
     Priority=Priority
   )
