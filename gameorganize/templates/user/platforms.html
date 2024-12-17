@@ -33,7 +33,9 @@
             </td>
             <td>
                 {% if username == current_user.username %}
-                <a href="" class="btn btn-danger">Delete</a>
+                    <form action="{{ url_for('user.platform_delete', username=username, id=platform.id)}}" method="post">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
                 {% endif %}
             </tr>
         {% endfor %}

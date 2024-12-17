@@ -55,22 +55,21 @@ def platform_add(username):
   flash(f"Added new platform {new_platform.name}")
   return redirect(url_for('user.platform_list', username=username))
 
-#@platform.route("/<username>/platforms/<id>/delete")
-#@login_required
-#def platform_delete(username, id):
-#  _user = db.session.query(User).where(User.username==username).first()
-#
-#  platform = db.session.query(Platform).where(Platform.id==id, Platform.user_id==current_user.id).first()
-#
-#  if(not platform):
-#    flash(f"Error: Platform ID {id} not found")
-#    return redirect(url_for('platform.detail'))
-#  
-#  db.session.delete(platform)
-#  db.session.commit()
-#
-#  flash(f"Deleted platform {platform.name}")
-#  return redirect(url_for('platform.detail'))gamelist
+@user.route("/<username>/platforms/<id>/delete", methods=['POST'])
+@login_required
+def platform_delete(username, id):
+  _user = db.session.query(User).where(User.username==username).first()
+  platform = db.session.query(Platform).where(Platform.id==id, Platform.user_id==_user.id).first()
+
+  if(not platform):
+    flash(f"Error: Platform ID {id} not found")
+    return redirect(url_for('user.platform_list', username=username))
+  
+  db.session.delete(platform)
+  db.session.commit()
+
+  flash(f"Deleted platform {platform.name}")
+  return redirect(url_for('user.platform_list', username=username))
 
 @user.route("/<username>/edit", methods=['POST'])
 @login_required
