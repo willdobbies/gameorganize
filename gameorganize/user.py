@@ -74,7 +74,7 @@ def platform_add(username):
 
 @user.route("/<username>/edit", methods=['POST'])
 @login_required
-def edit():
+def edit(username):
   args = request.form.to_dict()
 
   # Get all selected IDs
@@ -105,58 +105,59 @@ def edit():
   flash(f"{action} {len(selected)} games")
   return redirect(request.referrer)
 
+def parse_filters(args):
+  filters = []
+  filter_parse = {}
+
+  # Convert values back to objects
+  filter_parse["platform_id"] = args.getlist("platform_id")
+  for idx, val in enumerate(filter_parse["platform_id"]):
+    filter_parse["platform_id"][idx] = int(val)
+
+  filter_parse["priority"] = args.getlist("priority")
+  for idx, val in enumerate(filter_parse["priority"]):
+    filter_parse["priority"][idx] = Priority(int(val))
+
+  filter_parse["completion"] = args.getlist("completion")
+  for idx, val in enumerate(filter_parse["completion"]):
+    filter_parse["completion"][idx] = Completion(int(val))
+
+  # Apply filters to GameEntry query
+  if("platform_id" in args):
+    filters.append(GameEntry.platform_id.in_(filter_parse["platform_id"]))
+
+  if("priority" in args):
+    filters.append(GameEntry.priority.in_(filter_parse["priority"]))
+
+  if("completion" in args):
+    filters.append(GameEntry.completion.in_(filter_parse["completion"]))
+
+  filters.append(GameEntry.user_id.is_(id))
+  return filters,filter_parse
+
 @user.route("/<username>", methods=['GET', 'POST'])
 def detail(username):
   _user = db.session.query(User).where(User.username==username).first()
   
-  #return f"{_user.username} has {len(_user.games)} games"
+  if request.method == 'POST':
 
-  #if request.method == 'POST':
+    url_params = request.form.to_dict()
+    url_params["priority"] = request.form.getlist("priority")
+    url_params["completion"] = request.form.getlist("completion")
+    url_params["platform_id"] = request.form.getlist("platform_id")
 
-  #  url_params = request.form.to_dict()
-  #  url_params["priority"] = request.form.getlist("priority")
-  #  url_params["completion"] = request.form.getlist("completion")
-  #  url_params["platform_id"] = request.form.getlist("platform_id")
+    url_params = {k: v for k, v in url_params.items() if v}
 
-  #  url_params = {k: v for k, v in url_params.items() if v}
+    return redirect(url_for("user.detail", username=username, **url_params))
 
-  #  return redirect(url_for("user.detail", username=username, **url_params))
-
-  #args = request.args
-  #filters = []
-  #filter_parse = {}
-
-  ## Convert values back to objects
-  #filter_parse["platform_id"] = args.getlist("platform_id")
-  #for idx, val in enumerate(filter_parse["platform_id"]):
-  #  filter_parse["platform_id"][idx] = int(val)
-
-  #filter_parse["priority"] = args.getlist("priority")
-  #for idx, val in enumerate(filter_parse["priority"]):
-  #  filter_parse["priority"][idx] = Priority(int(val))
-
-  #filter_parse["completion"] = args.getlist("completion")
-  #for idx, val in enumerate(filter_parse["completion"]):
-  #  filter_parse["completion"][idx] = Completion(int(val))
-
-  ## Apply filters to GameEntry query
-  #if("platform_id" in args):
-  #  filters.append(GameEntry.platform_id.in_(filter_parse["platform_id"]))
-
-  #if("priority" in args):
-  #  filters.append(GameEntry.priority.in_(filter_parse["priority"]))
-
-  #if("completion" in args):
-  #  filters.append(GameEntry.completion.in_(filter_parse["completion"]))
-
-  #filters.append(GameEntry.user_id.is_(id))
-  
-  filters = []
-  games_filtered = _user.games #.filter(*filters)
+  filters,filter_parse = parse_filters(request.args)
+  games_filtered = _user.games#.filter(*filters)
 
   return render_template(
     'user/detail.html',
-    filter={},
+    filter=filter_parse,
+    Completion=Completion,
+    Priority=Priority,
     games=games_filtered,
     platforms=_user.platforms,
     stats=get_stats(games_filtered),

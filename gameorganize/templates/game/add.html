@@ -8,7 +8,8 @@
     <div class="form-group">
         <label for="platform">Platform</label>
         <select class="form-control" name="platform">
-            {% for platform in all_platforms %}
+            <option></option>
+            {% for platform in platforms %}
                 <option value="{{platform.id}}">{{ platform.name }}</option>
             {% endfor %}
         </select>

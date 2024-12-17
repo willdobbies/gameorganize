@@ -24,7 +24,7 @@
 </thead>
 <tbody>
     <tr class="platform">
-        {% for platform in all_platforms %}
+        {% for platform in platforms %}
             <td>
                 <a href="{{ url_for('user.detail', username=username, platform_id=platform.id)}}">{{platform.name}}</a>
             </td>

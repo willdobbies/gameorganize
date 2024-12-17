@@ -70,6 +70,8 @@ def add():
 
   return render_template(
     'game/add.html',
+    Completion=Completion,
+    Priority=Priority,
     platforms=current_user.platforms,
   )
 

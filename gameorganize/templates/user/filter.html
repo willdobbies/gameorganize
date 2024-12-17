@@ -19,7 +19,7 @@
     </div>
     <div class="form-group">
         <label for="name">Platform: </label>
-        {% for platform in all_platforms %}
+        {% for platform in platforms %}
             {% set checked = "checked" if (platform.id in filter["platform_id"]) else "" %}
             <input {{checked}} class="btn-check" type="checkbox" id="{{platform.name}}" name="platform_id" value="{{platform.id}}">
             <label class="btn btn-outline-secondary" for="{{platform.name}}">{{platform.name}}</label>

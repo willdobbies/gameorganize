@@ -41,11 +41,11 @@ def test_entries(app):
         db.session.add(g3)
         db.session.commit()
 
-        all_games=db.session.query(GameEntry)
+        games=db.session.query(GameEntry)
 
-        assert(g1 in all_games)
-        assert(g2 in all_games)
-        assert(g3 in all_games)
+        assert(g1 in games)
+        assert(g2 in games)
+        assert(g3 in games)
 
         db.session.delete(p1)
         db.session.commit()
