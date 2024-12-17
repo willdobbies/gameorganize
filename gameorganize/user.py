@@ -132,7 +132,7 @@ def parse_filters(args):
   if("completion" in args):
     filters.append(GameEntry.completion.in_(filter_parse["completion"]))
 
-  filters.append(GameEntry.user_id.is_(id))
+  #filters.append(GameEntry.user_id==id)
   return filters,filter_parse
 
 @user.route("/<username>", methods=['GET', 'POST'])
@@ -151,15 +151,17 @@ def detail(username):
     return redirect(url_for("user.detail", username=username, **url_params))
 
   filters,filter_parse = parse_filters(request.args)
-  games_filtered = _user.games#.filter(*filters)
+  games = db.session.query(GameEntry).where(GameEntry.user_id==_user.id)
+  if(games):
+    games = games.filter(*filters)
 
   return render_template(
     'user/detail.html',
     filter=filter_parse,
     Completion=Completion,
     Priority=Priority,
-    games=games_filtered,
+    games=games,
     platforms=_user.platforms,
-    stats=get_stats(games_filtered),
+    stats=get_stats(games),
     username=username,
   )

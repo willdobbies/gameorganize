@@ -2,11 +2,11 @@
 
 {% block content %}
 
+<h1>{{username}}'s Games</h1>
+
 {% include "user/stats.html" %}
 
 <br>
-
-<h1>{{username}}'s Games</h1>
 
 {%if username == current_user.username%}
 <a href="{{ url_for('game.add')}}" class="btn btn-success">New</a>
