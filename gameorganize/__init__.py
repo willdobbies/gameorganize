@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from .db import db
 from .config import DevelopmentConfig
 from flask_login import LoginManager
@@ -20,6 +20,10 @@ def register_blueprints(app):
     from .gamelist import gamelist
     #from .importer import importer
     from .platform import platform
+
+    @app.route("/", methods=['GET'])
+    def home():
+        return render_template("home.html")
 
     app.register_blueprint(auth)
     app.register_blueprint(game, url_prefix='/game')

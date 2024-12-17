@@ -1,6 +1,7 @@
 from .db import db
 from .model.game import GameEntry, Completion, Priority
 from .model.platform import Platform, get_user_platforms
+from .model.user import User
 from flask import Blueprint, render_template, request, url_for, redirect, flash
 from flask_login import login_required, current_user
 
@@ -58,59 +59,63 @@ def edit():
   flash(f"{action} {len(selected)} games")
   return redirect(request.referrer)
 
-@gamelist.route("/", methods=['GET', 'POST'])
-@login_required
-def detail():
-  if request.method == 'POST':
+@gamelist.route("/<username>", methods=['GET', 'POST'])
+def detail(username):
+  _user = db.session.query(User).where(User.username==username).first()
 
-    url_params = request.form.to_dict()
-    url_params["priority"] = request.form.getlist("priority")
-    url_params["completion"] = request.form.getlist("completion")
-    url_params["platform_id"] = request.form.getlist("platform_id")
-
-    url_params = {k: v for k, v in url_params.items() if v}
-
-    return redirect(url_for("gamelist.detail", **url_params))
-
-  args = request.args
-  filters = []
-  filter_parse = {}
-
-  # Convert values back to objects
-  filter_parse["platform_id"] = args.getlist("platform_id")
-  for idx, val in enumerate(filter_parse["platform_id"]):
-    filter_parse["platform_id"][idx] = int(val)
-
-  filter_parse["priority"] = args.getlist("priority")
-  for idx, val in enumerate(filter_parse["priority"]):
-    filter_parse["priority"][idx] = Priority(int(val))
-
-  filter_parse["completion"] = args.getlist("completion")
-  for idx, val in enumerate(filter_parse["completion"]):
-    filter_parse["completion"][idx] = Completion(int(val))
-
-  # Apply filters to GameEntry query
-  if("platform_id" in args):
-    filters.append(GameEntry.platform_id.in_(filter_parse["platform_id"]))
-
-  if("priority" in args):
-    filters.append(GameEntry.priority.in_(filter_parse["priority"]))
-
-  if("completion" in args):
-    filters.append(GameEntry.completion.in_(filter_parse["completion"]))
-
-  filters.append(GameEntry.user_id.is_(current_user.id))
+  if(not _user):
+    return redirect('/')
   
-  all_games=db.session.query(GameEntry).filter(*filters)
+  #return f"{_user.username} has {len(_user.games)} games"
 
-  stats = get_stats(all_games)
+  #if request.method == 'POST':
+
+  #  url_params = request.form.to_dict()
+  #  url_params["priority"] = request.form.getlist("priority")
+  #  url_params["completion"] = request.form.getlist("completion")
+  #  url_params["platform_id"] = request.form.getlist("platform_id")
+
+  #  url_params = {k: v for k, v in url_params.items() if v}
+
+  #  return redirect(url_for("gamelist.detail", username=username, **url_params))
+
+  #args = request.args
+  #filters = []
+  #filter_parse = {}
+
+  ## Convert values back to objects
+  #filter_parse["platform_id"] = args.getlist("platform_id")
+  #for idx, val in enumerate(filter_parse["platform_id"]):
+  #  filter_parse["platform_id"][idx] = int(val)
+
+  #filter_parse["priority"] = args.getlist("priority")
+  #for idx, val in enumerate(filter_parse["priority"]):
+  #  filter_parse["priority"][idx] = Priority(int(val))
+
+  #filter_parse["completion"] = args.getlist("completion")
+  #for idx, val in enumerate(filter_parse["completion"]):
+  #  filter_parse["completion"][idx] = Completion(int(val))
+
+  ## Apply filters to GameEntry query
+  #if("platform_id" in args):
+  #  filters.append(GameEntry.platform_id.in_(filter_parse["platform_id"]))
+
+  #if("priority" in args):
+  #  filters.append(GameEntry.priority.in_(filter_parse["priority"]))
+
+  #if("completion" in args):
+  #  filters.append(GameEntry.completion.in_(filter_parse["completion"]))
+
+  #filters.append(GameEntry.user_id.is_(id))
+  
+  filters = []
+  games_filtered = _user.games #.filter(*filters)
 
   return render_template(
     'gamelist/detail.html',
-    Completion=Completion,
-    Priority=Priority,
-    all_games=all_games,
-    all_platforms=get_user_platforms(current_user.id),
-    filter=filter_parse,
-    stats=stats,
+    filter={},
+    games=games_filtered,
+    platforms=_user.platforms,
+    stats=get_stats(games_filtered),
+    username=username,
   )

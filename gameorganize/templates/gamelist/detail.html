@@ -6,6 +6,8 @@
 
 <br>
 
+<h1>{{username}}'s Games</h1>
+
 <a href="{{ url_for('game.add')}}" class="btn btn-success">New</a>
 <a href="{{ url_for('platform.detail')}}" class="btn btn-warning">Platforms</a>
 
@@ -35,11 +37,11 @@
             <a href="{{ url_for ('game.detail', id=game.id) }}">{{ game.name }}</a>
         </td>
         <td>
-            <a class="plainlink" href="{{ url_for('gamelist.detail', platform_id=game.platform_id) }}">{{ game.platform.name }}</a>
+            <a class="plainlink" href="{{ url_for('gamelist.detail', username=username, platform_id=game.platform_id) }}">{{ game.platform.name }}</a>
         </td>
         <td>
             <div class="badge bg-{{game.completion.get_color()}}">
-                <a class="plainlink" href="{{ url_for('gamelist.detail', completion=game.completion.value) }}">{{ game.completion.name }}</a>
+                <a class="plainlink" href="{{ url_for('gamelist.detail', username=username, completion=game.completion.value) }}">{{ game.completion.name }}</a>
             </div>
         </td>
         <td>
@@ -53,7 +55,7 @@
             {% endif %}
         </td>
         <td>
-            <a class="plainlink" href="{{ url_for('gamelist.detail', priority=game.priority.value) }}">{{ game.priority.name }}</a>
+            <a class="plainlink" href="{{ url_for('gamelist.detail', username=username, priority=game.priority.value) }}">{{ game.priority.name }}</a>
         </td>
         <td>
             {% if game.notes %}

@@ -6,7 +6,7 @@ class Platform(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
-    children = relationship('GameEntry', backref='platform')
+    games = relationship('GameEntry', backref='platform')
 
     __table_args__ = (
         UniqueConstraint('name', 'user_id', name='platform_unique_constraint'),

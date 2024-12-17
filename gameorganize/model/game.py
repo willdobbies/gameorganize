@@ -51,6 +51,7 @@ class GameEntry(db.Model):
     cheev: Mapped[int] = mapped_column(default=0)
     cheev_total: Mapped[int] = mapped_column(default=0)
     notes:Mapped[str] = mapped_column(default="")
+
     __table_args__ = (
         UniqueConstraint('name', 'user_id', name='game_name_unique_constraint'),
     )

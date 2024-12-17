@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from gameorganize.db import db
 from gameorganize.model.user import User
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -23,7 +23,7 @@ def login_post():
 
     # send to homepage
     login_user(user, remember=remember)
-    return redirect(url_for('gamelist.detail'))
+    return redirect(url_for('gamelist.detail', username=current_user.username))
 
 @auth.route('/login')
 def login():
