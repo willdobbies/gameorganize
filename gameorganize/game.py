@@ -6,9 +6,9 @@ from flask_login import login_required, current_user
 
 game = Blueprint('game', __name__, template_folder='templates')
 
-@game.route("/<id>", methods=['GET', 'POST'])
+@game.route("/<username>/game/<id>", methods=['GET', 'POST'])
 @login_required
-def detail(id):
+def detail(username, id):
   _game = db.session.get(GameEntry, id)
   #game = db.one_or_404(db.select(GameEntry).filter_by(id=id))
   print(_game)
@@ -31,20 +31,23 @@ def detail(id):
       db.session.commit()
     except Exception as e:
       flash(f"DB Error: {e}")
-      return redirect(url_for('game.detail', id=id))
+      return redirect(url_for('game.detail', username=username, id=id))
 
     flash(f"Updated: Game {_game.name}")
-    return redirect(url_for('game.detail', id=id))
+    return redirect(url_for('game.detail', username=username, id=id))
 
   return render_template(
     'game/detail.html',
     game=_game,
+    username=username,
     platforms=current_user.platforms,
+    Completion=Completion,
+    Priority=Priority,
   )
 
-@game.route("/add", methods=['GET', 'POST'])
+@game.route("/<username>/game/add", methods=['GET', 'POST'])
 @login_required
-def add():
+def add(username):
   if request.method == 'POST':
     try:
       if(not request.form.get("name")):
@@ -63,21 +66,22 @@ def add():
       db.session.commit()
     except Exception as e:
       flash(f"DB Error: {e}")
-      return redirect(url_for('game.add'))
+      return redirect(url_for('game.add', username=username))
 
     flash(f"Added new game {new_game.name}")
-    return redirect(url_for('user.detail', username=current_user.username))
+    return redirect(url_for('user.detail', username=username))
 
   return render_template(
     'game/add.html',
     Completion=Completion,
     Priority=Priority,
+    username=username,
     platforms=current_user.platforms,
   )
 
-@game.route("/<id>/delete", methods=['GET', 'POST'])
+@game.route("/<username>/game/<id>/delete", methods=['GET', 'POST'])
 @login_required
-def delete(id):
+def delete(username, id):
   _game = db.session.get(GameEntry, id)
 
   if(not _game):
@@ -88,4 +92,4 @@ def delete(id):
   db.session.commit()
 
   flash(f"Deleted game {_game.name}")
-  return redirect(url_for('user.detail'))
+  return redirect(url_for('user.detail', username=username))

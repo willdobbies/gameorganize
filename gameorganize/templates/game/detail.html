@@ -51,9 +51,11 @@
         <textarea name="notes" cols="40" rows="5"class="form-control">{{ game.notes }}</textarea>
     </div>
     <div class="form-group">
+        {% if current_user.username == username %}
         <button type="submit" class="btn btn-success">Save</button>
-        <a href="{{ url_for('user.detail') }}" class="btn btn-secondary">Cancel</a>
-        <a href="{{ url_for('game.delete', id=game.id) }}" class="btn btn-danger">Delete</a>
+        <a href="{{ url_for('game.delete', username=username, id=game.id) }}" class="btn btn-danger">Delete</a>
+        {% endif %}
+        <a href="{{ url_for('user.detail', username=username) }}" class="btn btn-secondary">Back</a>
     </div>
     <input type="hidden" name="id" value="{{ game.id }}" />
 </form>
