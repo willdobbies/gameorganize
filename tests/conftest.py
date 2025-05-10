@@ -1,5 +1,6 @@
 from gameorganize import create_app
 from gameorganize.config import TestingConfig
+from gameorganize.db import db
 import pytest
 
 def pytest_addoption(parser):
@@ -20,9 +21,20 @@ def app():
     yield app
 
 @pytest.fixture()
-def client(app):
+def app_client(app):
     return app.test_client()
 
 @pytest.fixture()
-def runner(app):
+def app_runner(app):
     return app.test_cli_runner()
+
+@pytest.fixture()
+def db_session(app):
+    with app.app_context():
+        try:
+            #db.create_all()
+            yield db.session
+            db.session.rollback()
+            db.session.close()
+        finally:
+            db.drop_all()

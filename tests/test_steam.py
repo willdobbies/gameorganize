@@ -26,7 +26,7 @@ def test_fetch_stats(apiId, apiKey):
 
     #print(stats)
 
-def test_completion(client):
+def test_completion(app_client):
     importer = ImporterSteam(None, None)
 
     completion_null = importer.get_completion(0, {})

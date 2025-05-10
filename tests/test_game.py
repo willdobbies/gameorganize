@@ -1,54 +1,70 @@
 from gameorganize.model.game import GameEntry, Completion, Priority, Ownership
 from gameorganize.model.platform import Platform
-from gameorganize.db import db
+from gameorganize.model.user import User
 
-def test_entries(app):
-    """Add some test games, check if they go into the DB okay"""
-
-    p1 = Platform(
-        name="TestPlatform",
+def test_game_entry(db_session):
+    # make some entries
+    valid_user = User(
+        id = 0,
+        username="user",
+        password="password",
+    )
+    valid_platform = Platform(
+        id = 0,
+        name="Playstation",
+        user_id = valid_user.id,
+    )
+    valid_game_entry = GameEntry(
+        name="Spyro The Dragon",
+        user_id = valid_user.id,
+        platform_id = valid_platform.id,
     )
 
-    g1 = GameEntry(
-        name="Oddworld: Abe's Oddysee", 
-        platform=p1,
-        completion=Completion.Beaten, 
-        ownership=Ownership.Digital, 
-        priority=Priority.Normal, 
-        notes="I really liked this game",
+    db_session.add(valid_user)
+    db_session.add(valid_platform)
+    db_session.add(valid_game_entry)
+    db_session.commit()
+
+    search_user = db_session.query(User).filter_by(username="user").first()
+    assert (search_user.username == "user")
+    assert (search_user.password == "password")
+
+    search_platform = db_session.query(Platform).filter_by(name="Playstation").first()
+    assert (search_platform.user_id == valid_user.id)
+
+    search_game = db_session.query(GameEntry).filter_by(user_id=valid_user.id).first()
+    assert (search_game.platform_id == search_platform.id)
+
+def test_delete_platform(db_session):
+    # make some entries
+    valid_user = User(
+        id = 0,
+        username="user",
+        password="password",
+    )
+    valid_platform = Platform(
+        id = 0,
+        name="Playstation",
+        user_id = valid_user.id,
+    )
+    valid_game_entry = GameEntry(
+        name="Spyro The Dragon",
+        user_id = valid_user.id,
+        platform_id = valid_platform.id,
     )
 
-    g2 = GameEntry(
-        name="Pikmin 2", 
-        platform=p1,
-        completion=Completion.Started, 
-        priority=Priority.Low, 
-    )
+    db_session.add(valid_user)
+    db_session.add(valid_platform)
+    db_session.add(valid_game_entry)
+    db_session.commit()
 
-    g3 = GameEntry(
-        name="Kingdom Hearts", 
-        platform=p1,
-        completion=Completion.Completed, 
-        priority=Priority.Replay, 
-        cheev=100, 
-        cheev_total=100
-    )
+    search_platform = db_session.query(Platform).filter_by(name="Playstation").first()
+    assert (search_platform.user_id == valid_user.id)
 
-    with app.app_context():
-        db.session.add(p1)
-        db.session.add(g1)
-        db.session.add(g2)
-        db.session.add(g3)
-        db.session.commit()
+    search_game = db_session.query(GameEntry).filter_by(user_id=valid_user.id).first()
+    assert (search_game.platform_id == valid_platform.id)
 
-        games=db.session.query(GameEntry)
+    db_session.delete(valid_platform)
+    db_session.commit()
 
-        assert(g1 in games)
-        assert(g2 in games)
-        assert(g3 in games)
-
-        db.session.delete(p1)
-        db.session.commit()
-
-        pikmin=db.session.query(GameEntry).where(GameEntry.name == "Pikmin 2").first()
-        assert(pikmin.platform is None)
+    assert (search_game.platform_id == None)
