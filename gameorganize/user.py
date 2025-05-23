@@ -141,11 +141,8 @@ def parse_filters(args):
 
   return filters,filter_parse
 
-@user.route("/<username>", methods=['GET', 'POST'])
-def detail(username):
-  _user = db.session.query(User).where(User.username==username).first()
-  
-  if request.method == 'POST':
+@user.route("/<username>", methods=['POST'])
+def detail_post(username):
     url_params = request.form.to_dict()
     url_params["priority"] = request.form.getlist("priority")
     url_params["completion"] = request.form.getlist("completion")
@@ -155,8 +152,15 @@ def detail(username):
 
     return redirect(url_for("user.detail", username=username, **url_params))
 
+@user.route("/<username>", methods=['GET'])
+def detail(username):
+  user = db.session.query(User).where(User.username==username).first()
+  if(not user):
+    abort(404)
+  
+  # Improve this, add pagination?
   filters,filter_parse = parse_filters(request.args)
-  games = db.session.query(GameEntry).where(GameEntry.user_id==_user.id)
+  games = db.session.query(GameEntry).where(GameEntry.user_id==user.id)
   if(games):
     games = games.filter(*filters)
 
@@ -166,7 +170,7 @@ def detail(username):
     Completion=Completion,
     Priority=Priority,
     games=games,
-    platforms=_user.platforms,
+    platforms=user.platforms,
     stats=get_stats(games),
     username=username,
   )
