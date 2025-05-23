@@ -16,13 +16,21 @@ def login_post():
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
 
+    # check username/password
+    if not username:
+        flash(f"Empty username")
+        return redirect(url_for('home')) 
+
     # find matching user
     user = User.query.filter_by(username=username).first()
 
-    # check password
-    if not user or not check_password_hash(user.password, password):
+    if not user:
+        flash(f"User '{username}' does not exist!")
+        return redirect(url_for('home')) 
+    
+    if not check_password_hash(user.password, password):
         flash('Invalid username or password')
-        return redirect(url_for('auth.login')) 
+        return redirect(url_for('home')) 
 
     # send to homepage
     login_user(user, remember=remember)
