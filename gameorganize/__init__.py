@@ -1,7 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from .db import db
 from .config import DevelopmentConfig
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 
 def create_app(config = DevelopmentConfig):
     app = Flask(__name__)
@@ -26,6 +26,8 @@ def register_blueprints(app):
 
     @app.route("/", methods=['GET'])
     def home():
+        if(current_user.is_authenticated):
+            return redirect(url_for('user.detail', username=current_user.username))
         return render_template("home.html")
 
     app.register_blueprint(auth)
