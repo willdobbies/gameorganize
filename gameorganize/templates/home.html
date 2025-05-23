@@ -1,4 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Welcome!</h1>
+<div class="row">
+    <div class="col-sm">
+        {% include "auth/login.html" %}
+    </div>
+    <div class="col-sm">
+        {% include "auth/signup.html" %}
+    </div>
+</div>
 {% endblock %}
