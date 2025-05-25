@@ -7,7 +7,7 @@ import re
 
 auth = Blueprint('auth', __name__)
 
-rex_password = re.compile("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")
+rex_password = re.compile("^(?=.*?[A-Z])(?=.*?[a-z]).{8,}$")
 
 @auth.route('/login', methods=['POST'])
 def login_post():
@@ -53,7 +53,7 @@ def signup_post():
         return redirect(url_for('home'))
     
     if(not rex_password.match(password)):
-        flash(f"Password must be at least 8 characters long and contain numbers and uppercase letters")
+        flash(f"Password must be at least 8 characters long and contain an uppercase letter")
         return redirect(url_for('home'))
 
     if(user):
