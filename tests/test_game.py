@@ -6,7 +6,7 @@ import pytest
 def setup_db(db_session):
     new_user = User(
         username="user",
-        password="password",
+        password="PassWord",
     )
     db_session.add(new_user)
     db_session.commit()
@@ -30,7 +30,6 @@ def test_game_entry(db_session):
     setup_db(db_session)
 
     search_user = db_session.query(User).filter_by(username="user").first()
-    assert (search_user.password == "password")
 
     search_platform = db_session.query(Platform).filter_by(name="Playstation").first()
     assert (search_platform.user_id == search_user.id)

@@ -2,12 +2,9 @@ from flask import Blueprint, render_template, request, url_for, redirect, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from gameorganize.db import db
 from gameorganize.model.user import User
-from werkzeug.security import generate_password_hash, check_password_hash
-import re
+from werkzeug.security import check_password_hash
 
 auth = Blueprint('auth', __name__)
-
-rex_password = re.compile("^(?=.*?[A-Z])(?=.*?[a-z]).{8,}$")
 
 @auth.route('/login', methods=['POST'])
 def login_post():
@@ -28,7 +25,7 @@ def login_post():
         flash(f"User '{username}' does not exist!")
         return redirect(url_for('home')) 
     
-    if not check_password_hash(user.password, password):
+    if not check_password_hash(user.password_hash, password):
         flash('Invalid username or password')
         return redirect(url_for('home')) 
 
@@ -45,29 +42,24 @@ def signup_post():
     username = request.form.get("username")
     password = request.form.get("password")
 
-    # check if username unique
     user = User.query.filter_by(username=username).first()
     
-    if(not username):
-        flash(f"Username must not be empty")
-        return redirect(url_for('home'))
-    
-    if(not rex_password.match(password)):
-        flash(f"Password must be at least 8 characters long and contain an uppercase letter")
-        return redirect(url_for('home'))
-
     if(user):
         flash(f"User {user.username} already exists")
         return redirect(url_for('home'))
     
     # make new user!
-    new_user = User(
-        username=username,
-        password=generate_password_hash(password, method='pbkdf2:sha1')
-    )
+    try:
+        new_user = User(
+            username=username,
+            password=password,
+        )
+        db.session.add(new_user)
+        db.session.commit()
 
-    db.session.add(new_user)
-    db.session.commit()
+    except Exception as e:
+        flash(str(e))
+        return redirect(url_for('home'))
     
     # send to login page
     flash(f"User {new_user.username} created. You can now log in.")
