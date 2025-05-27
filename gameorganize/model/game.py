@@ -52,9 +52,9 @@ class GameEntry(db.Model):
     cheev_total: Mapped[int] = mapped_column(default=0)
     notes:Mapped[str] = mapped_column(default="")
 
-    __table_args__ = (
-        UniqueConstraint('name', 'user_id', name='game_name_unique_constraint'),
-    )
+    #__table_args__ = (
+    #    UniqueConstraint('name', 'user_id', name='game_name_unique_constraint'),
+    #)
 
     def get_cheev_perc(self):
         return self.cheev / self.cheev_total

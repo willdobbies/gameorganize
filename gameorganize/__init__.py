@@ -18,7 +18,7 @@ def register_blueprints(app):
     from .auth import auth
     from .game import game
     from .user import user
-    #from .importer import importer
+    from .importer import importer
 
     @app.errorhandler(404) 
     def not_found(e): 
@@ -33,7 +33,7 @@ def register_blueprints(app):
     app.register_blueprint(auth)
     app.register_blueprint(game)
     app.register_blueprint(user)
-    #app.register_blueprint(importer, url_prefix='/import')
+    app.register_blueprint(importer, url_prefix='/import')
 
 def init_extensions(app):
     db.init_app(app)
