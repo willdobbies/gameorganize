@@ -26,7 +26,7 @@ def get_stats(games):
 
   return stats
 
-@user.route("/<username>/platforms", methods=['GET', 'POST'])
+@user.route("/platforms", methods=['GET', 'POST'])
 def platform_list(username):
   _user = db.session.query(User).where(User.username==username).first()
   return render_template(
@@ -71,7 +71,7 @@ def platform_delete(id):
   flash(f"Deleted platform {platform.name}")
   return redirect(url_for('user.platform_list', username=current_user.username))
 
-@user.route("/<username>/edit", methods=['POST'])
+@user.route("/edit", methods=['POST'])
 @login_required
 def edit(username):
   _user = db.session.query(User).where(User.username==username).first()
@@ -141,7 +141,7 @@ def parse_filters(args):
 
   return filters,filter_parse
 
-@user.route("/<username>", methods=['POST'])
+@user.route("/", methods=['POST'])
 def detail_post(username):
     url_params = request.form.to_dict()
     url_params["priority"] = request.form.getlist("priority")
@@ -152,7 +152,7 @@ def detail_post(username):
 
     return redirect(url_for("user.detail", username=username, **url_params))
 
-@user.route("/<username>", methods=['GET'])
+@user.route("/", methods=['GET'])
 def detail(username):
   user = db.session.query(User).where(User.username==username).first()
   if(not user):

@@ -31,8 +31,8 @@ def register_blueprints(app):
         return render_template("home.html")
 
     app.register_blueprint(auth)
-    app.register_blueprint(game)
-    app.register_blueprint(user)
+    app.register_blueprint(game, url_prefix="/game/")
+    app.register_blueprint(user, url_prefix="/user/<username>")
     app.register_blueprint(importer, url_prefix='/import')
 
 def init_extensions(app):

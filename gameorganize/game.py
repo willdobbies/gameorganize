@@ -7,8 +7,27 @@ from flask_login import login_required, current_user
 
 game = Blueprint('game', __name__, template_folder='templates')
 
-@game.route("/game/<id>", methods=['POST'])
-def edit(id):
+@game.route("/<id>", methods=['GET'])
+def detail(id):
+  _game = db.session.get(GameEntry, id)
+
+  if(not _game):
+    abort(404)
+
+  _game_user = db.session.get(User, _game.user_id)
+
+  return render_template(
+    'game/detail.html',
+    game=_game,
+    game_user=_game_user,
+    platforms=current_user.platforms,
+    Completion=Completion,
+    Priority=Priority,
+  )
+
+@game.route("/<id>", methods=['POST'])
+@login_required
+def update(id):
   _game = db.session.get(GameEntry, id)
 
   if(not _game):
@@ -35,25 +54,35 @@ def edit(id):
   flash(f"Updated game: '{_game.name}'")
   return redirect(url_for('game.detail', id=id))
 
-@game.route("/game/<id>", methods=['GET'])
-def detail(id):
+
+@game.route("/<id>/delete", methods=['POST'])
+@login_required
+def delete(id):
   _game = db.session.get(GameEntry, id)
 
   if(not _game):
     abort(404)
 
-  _game_user = db.session.get(User, _game.user_id)
+  if(_game.user_id != current_user.id):
+    abort(403)
 
+  db.session.delete(_game)
+  db.session.commit()
+
+  flash(f"Deleted game '{_game.name}'")
+  return redirect(url_for("user.detail", username=current_user.username))
+
+@game.route("/add", methods=['GET'])
+@login_required
+def add():
   return render_template(
-    'game/detail.html',
-    game=_game,
-    game_user=_game_user,
-    platforms=current_user.platforms,
+    'game/add.html',
     Completion=Completion,
     Priority=Priority,
+    platforms=current_user.platforms,
   )
 
-@game.route("/game/add", methods=['POST'])
+@game.route("/add", methods=['POST'])
 @login_required
 def add_post():
   try:
@@ -77,30 +106,3 @@ def add_post():
 
   flash(f"Added new game {new_game.name}")
   return redirect(url_for('user.detail', username=current_user.username))
-
-@game.route("/game/add", methods=['GET'])
-@login_required
-def add():
-  return render_template(
-    'game/add.html',
-    Completion=Completion,
-    Priority=Priority,
-    platforms=current_user.platforms,
-  )
-
-@game.route("/game/<id>/delete", methods=['POST'])
-@login_required
-def delete(id):
-  _game = db.session.get(GameEntry, id)
-
-  if(not _game):
-    abort(404)
-
-  if(_game.user_id != current_user.id):
-    abort(403)
-
-  db.session.delete(_game)
-  db.session.commit()
-
-  flash(f"Deleted game '{_game.name}'")
-  return redirect(url_for("user.detail", username=current_user.username))
