@@ -11,6 +11,7 @@ dependencies = [
     "flask_sqlalchemy",
     "flask_migrate",
     "flask_login",
+    "flask_wtf",
 ]
 requires-python = ">= 3.8"
 readme = "README.md"

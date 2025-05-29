@@ -2,6 +2,7 @@ from .db import db
 from .model.game import GameEntry, Completion, Priority
 from .model.platform import Platform, get_user_platforms
 from .model.user import User
+from .forms.game import GameEntryForm
 from flask import Blueprint, render_template, request, url_for, redirect, flash, abort
 from flask_login import login_required, current_user
 
@@ -14,15 +15,14 @@ def detail(id):
   if(not _game):
     abort(404)
 
-  _game_user = db.session.get(User, _game.user_id)
+  _game_form = GameEntryForm()
+  _game_form.platform.choices = [platform.name for platform in _game.user.platforms]
+  _game_form.platform.data = _game.platform
 
   return render_template(
     'game/detail.html',
     game=_game,
-    game_user=_game_user,
-    platforms=current_user.platforms,
-    Completion=Completion,
-    Priority=Priority,
+    form=_game_form,
   )
 
 @game.route("/<id>", methods=['POST'])

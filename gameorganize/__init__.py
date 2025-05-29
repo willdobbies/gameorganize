@@ -18,6 +18,7 @@ def register_blueprints(app):
     from .auth import auth
     from .game import game
     from .user import user
+    from .platforms import platforms
     from .importer import importer
 
     @app.errorhandler(404) 
@@ -33,6 +34,7 @@ def register_blueprints(app):
     app.register_blueprint(auth)
     app.register_blueprint(game, url_prefix="/game/")
     app.register_blueprint(user, url_prefix="/user/<username>")
+    app.register_blueprint(platforms, url_prefix="/platforms")
     app.register_blueprint(importer, url_prefix='/import')
 
 def init_extensions(app):

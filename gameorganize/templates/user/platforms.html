@@ -20,7 +20,7 @@
             </td>
             <td>
                 {% if username == current_user.username %}
-                    <form action="{{ url_for('user.platform_delete', username=username, id=platform.id)}}" method="post">
+                    <form action="{{ url_for('platforms.delete', id=platform.id)}}" method="post">
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
                 {% endif %}
@@ -31,7 +31,7 @@
 </table>
 
 {% if username == current_user.username %}
-<form action="{{ url_for('user.platform_add', username=username)}}" method="post">
+<form action="{{ url_for('platforms.add')}}" method="post">
     <div class="form-group row">
         <div class="col-lg-10">
                 <input class="form-control" type="text" name="name">

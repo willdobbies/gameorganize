@@ -14,7 +14,7 @@
     <button class="p-2 btn btn-danger" data-toggle="collapse" data-target="#edit">Edit</button>
   {% endif %}
 
-  <a class="p-2 btn btn-warning" href="{{ url_for('user.platform_list', username=username)}}">Platforms</a>
+  <a class="p-2 btn btn-warning" href="{{ url_for('platforms.details', username=username)}}">Platforms</a>
   <button class="p-2 btn btn-primary" data-toggle="collapse" data-target="#filter">Filter</button>
 </div>
 
